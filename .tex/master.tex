@@ -1,0 +1,31 @@
+\documentclass{report}
+% build with LuaLaTeX for this font
+\usepackage{qtxmath} % for math font
+\usepackage{ccfonts,eulervm}
+
+\usepackage{docmute}
+\usepackage{mystyle}
+\usepackage{commands}
+\mathtoolsset{showonlyrefs=true}
+
+\begin{document}
+%%% TITLE %%%
+\input{title}
+\thispagestyle{empty}
+\clearpage
+%%% FRONT %%% 
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+% \input{summary}
+\input{preface}
+\clearpage
+\input{notations}
+\clearpage
+%%% BODY %%% 
+\pagenumbering{arabic}
+\input{chapter1}
+%%% BACK %%% 
+\clearpage
+\input{back}
+\end{document}

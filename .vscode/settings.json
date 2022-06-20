@@ -1,0 +1,139 @@
+{
+	"markdown.extension.print.theme": "dark",
+	//"latex-workshop.view.pdf.viewer": "tab",
+	// Specify HyperSnips file path to be applied ONLY IF YOU NEED IT. You are recommended to use the default one: /home/user/.config/Code/User/hsnips/latex.hsnips
+	// "hsnips.hsnipsPath": ".vscode/tex.hsnips",
+	"[tex]": {
+		"editor.suggest.snippetsPreventQuickSuggestions": false,
+		"editor.tabSize": 2,
+		"editor.formatOnSave": true,
+	},
+	"[latex]": {
+		"editor.suggest.snippetsPreventQuickSuggestions": false,
+		"editor.tabSize": 2,
+		"editor.formatOnSave": true,
+	},
+	"[bibtex]": {
+		"editor.tabSize": 2
+	},
+	// ---------- LaTeX Workshop ----------
+	"latex-workshop.bibtex-format.sort.enabled": true,
+	"latex-workshop.chktex.enabled": true,
+	"latex-workshop.latex.autoBuild.run": "onSave",
+	"latex-workshop.intellisense.package.enabled": true,
+	// Specify output directory. Manually include "-outdir=%OUTDIR%" in args of latex-workshop.latex.tools
+	"latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/.pdf",
+	"latex-workshop.latex.autoClean.run": "onBuilt",
+	"latex-workshop.latex.clean.subfolder.enabled": true,
+	// "glob": by latex-workshop, "claenComman": by some other tool
+	"latex-workshop.latex.clean.method": "glob",
+	// if you choose "clean command", specify commands to be run
+	//"latex-workshop.latex.clean.command": "latexmk",
+	// "latex-workshop.latex.clean.args": [
+	// 	"-c",
+	// 	"%TEX%"
+	// ],
+	// args for "grob"
+	// clean up generated intermediate files 
+	"latex-workshop.latex.clean.fileTypes": [
+		"*.aux",
+		"*.bbl",
+		"*.blg",
+		"*.idx",
+		"*.ind",
+		"*.lof",
+		"*.lot",
+		"*.out",
+		"*.toc",
+		"*.acn",
+		"*.acr",
+		"*.alg",
+		"*.glg",
+		"*.glo",
+		"*.gls",
+		"*.ist",
+		"*.fls",
+		"*.log",
+		"*.fdb_latexmk",
+		"*.snm",
+		"*.nav",
+		"*.dvi",
+		"*.synctex.gz" // added to defaults
+	],
+	// recipe for build in English
+	// "latex-workshop.latex.recipes": [
+	// 	{
+	// 		"name": "latexmk",
+	// 		"tools": [
+	// 			"latexmk"
+	// 		]
+	// 	},
+	// ],
+	// recipe for build for English
+	// much faster than LuaLaTeX.
+	// "latex-workshop.latex.recipes": [
+	// 	{
+	// 		"name": "latexmk-English",
+	// 		"tools": [
+	// 			"latexmk" // default latex is pdflatex (for English)
+	// 		]
+	// 	},
+	// ],
+	// recipe for build
+	// "latex-workshop.latex.recipe.default": "latexmk-English",
+	"latex-workshop.latex.recipe.default": "latexmk-LuaLaTeX", // works also for Jpanese
+	"latex-workshop.latex.recipes": [
+		{
+			"name": "latexmk-LuaLaTeX",
+			"tools": [
+				"latexmk-LuaLaTeX"
+			]
+		},
+		{
+			"name": "latexmk-English",
+			"tools": [
+				"latexmk" // default latex of latexmk is pdflatex (for English only)
+			]
+		},
+	],
+	"latex-workshop.latex.tools": [
+		{
+			"name": "latexmk",
+			"command": "latexmk",
+			"args": [
+				"-silent",
+				"-outdir=%OUTDIR%",
+				"%DOC%"
+			],
+		},
+		{
+			"name": "latexmk-LuaLaTeX",
+			"command": "latexmk",
+			"args": [
+				"-e",
+				"$lualatex=q/lualatex %O -synctex=1 -interaction=nonstopmode -file-line-error %S/",
+				"-e",
+				"$bibtex=q/upbibtex %O %B/",
+				"-e",
+				"$biber=q/biber %O --bblencoding=utf8 -u -U --output_safechars %B/",
+				"-e",
+				"$makeindex=q/upmendex %O -o %D %S/",
+				"-norc",
+				"-gg",
+				"-pdflua",
+				"-outdir=%OUTDIR%",
+				"%DOC%"
+			],
+			"env": {}
+		}
+	],
+	// spell checker
+	"cSpell.customDictionaries": {
+		"custom-dictionary-workspace": {
+			"name": "custom-dictionary-workspace",
+			"path": "${workspaceFolder}/.cspell/custom-dictionary-workspace.txt",
+			"addWords": true,
+			"scope": "workspace"
+		}
+	},
+}

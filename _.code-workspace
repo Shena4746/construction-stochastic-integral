@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"name": "your-workspace",
+			"path": "."
+		}
+	],
+	"settings": {
+		"markdown.extension.math.enabled": true,
+		"latex-workshop.view.pdf.viewer": "tab",
+		"latex-workshop.latexindent.path": "latexindent",
+		"latex-workshop.intellisense.package.enabled": true
+	}
+}
