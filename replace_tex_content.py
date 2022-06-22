@@ -2,7 +2,10 @@ import glob
 import os
 import re
 
-format_white_list = [".txt", ".tex", ".sty"]
+# replace content of LaTeX files in the current directory.
+
+# file formats to be worked on
+format_white_list = [".txt", ".tex", ".sty", ".ltx"]
 
 # get files
 files = glob.glob("./*")
@@ -12,9 +15,6 @@ for file in files:
         # read files
         with open(file) as reader:
             content = reader.read()
-
-        # check
-        print(file)
 
         # replace!
         # env command
@@ -26,7 +26,7 @@ for file in files:
         content = content.replace("{Cor}", "{cor}")
         content = content.replace("{Rem}", "{rem}")
         content = content.replace("{Ex}", "{ex}")
-        # math inline command
+        # math command
         content = re.sub("\$([^\$]+)\$", r"\( \1 \)", content)
         # write and save
         dirname, filename = os.path.split(file)
