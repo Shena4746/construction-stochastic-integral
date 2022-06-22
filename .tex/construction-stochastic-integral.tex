@@ -1,7 +1,9 @@
-\documentclass{report}
+\documentclass{ltjsarticle}
+\usepackage[haranoaji,nfssonly]{luatexja-preset}
 % build with LuaLaTeX for this font
 \usepackage{qtxmath} % for math font
-\usepackage{ccfonts,eulervm}
+%\usepackage{ccfonts}
+\usepackage{eulervm}
 
 \usepackage{docmute}
 \usepackage{mystyle}
@@ -19,13 +21,15 @@
 \clearpage
 % \input{summary}
 \input{preface}
+\input{overview}
 \clearpage
 \input{notations}
 \clearpage
 %%% BODY %%% 
 \pagenumbering{arabic}
-\input{chapter1}
+\input{preliminaries}
+\input{section2}
+\input{section3}
 %%% BACK %%% 
-\clearpage
 \input{back}
 \end{document}

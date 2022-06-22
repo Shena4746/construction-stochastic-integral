@@ -599,4 +599,11 @@
 		],
 		"scope": "tex,latex"
 	},
+	"colon with spacing": {
+		"prefix": "cln",
+		"body": [
+			"\\COLON"
+		],
+		"scope": "tex, latex"
+	},
 }

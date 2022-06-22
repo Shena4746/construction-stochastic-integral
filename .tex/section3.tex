@@ -1,0 +1,690 @@
+\documentclass{ltjsarticle}
+\usepackage[haranoaji,nfssonly]{luatexja-preset}
+\usepackage{mystyle}
+\usepackage{commands}
+\mathtoolsset{showonlyrefs=true}
+
+% remember that docmute package neglects all the preambles of the included .tex files. 
+\begin{document}
+
+\section{Stochastic Integral}
+\( \Hs \) の元が定める測度空間上の \( \mathrm{L}^2 \) 空間から \( \Hs \) への, ジャンプについてLebesgue-Stieltjes 積分と同様の性質を持つ写像として, Stochastic Integral を構成する.
+このジャンプの性質によって, Stochastic Integral と Quadratic Co-Variation が関連付けられ,
+自然に等長性を持つ.
+次いで, Stochastic Integral のIntegrand と Integrator の空間を Localization によって拡張した後に
+Stochastic Integral の基本性質を示し,
+最後に Ito-Stieltjes積分, Lebesgue-Stieltjes 積分との関連を示す.
+
+\subsection{稠密性とKunita-Watanabe不等式}
+以下で見る Stochastic Integral の構成においては, ある Hilbert 空間 \( \Hs \) 上に定めた線型汎関数が連続であること, また, Integrand の空間に"単純"な確率過程が稠密に存在すること, すなわち, 
+Integrand の空間が十分に狭いことを利用する.
+まずこれらの空間を準備しよう.
+
+\begin{dfn}[可予測過程]
+	LCRL-適合過程全体が生成する \( \mathbb{R}_{+} \times \Omega \) 上の
+	\( \sigma \)- 加法族 \( \mathscr{P} \) を可予測 \( \sigma \)- 加法族といい,
+	\( X \in \mathrm{m}\mathscr{P} \) であるとき, \( X \) は可予測 (Predictable) であるという.
+	
+	また, \( X \) が次の形であるとき, 可予測階段過程であるという.
+	\begin{equation} \label{PredStep}
+		X := \sum_{ i = 1 }^n \xi_i 1_{(t_i,\, t_{ i + 1 }]},
+		\quad	\xi_i \in \mathrm{b}\mathscr{F}_{t_i}.
+	\end{equation}
+	可予測階段過程全体の集合を \( \mathscr{S} \) とおく.
+	\fin\end{dfn}
+
+\( M \in \Hl \) に対して
+\[
+	\alpha_M(C) := E \left( \int_0^{\infty} 1_C\, d[M] \right),
+	\quad C \in \mathscr{B}(\mathbb{R}_{+}) \otimes \mathscr{F}
+\]
+とおくと, \( \alpha_M \) は \( \mathscr{B}(\mathbb{R}_{+}) \otimes \mathscr{F} \) 上の測度である.
+ゆえに, 測度空間 \( ( \mathbb{R}_{+} \times \Omega, \mathscr{P}, \alpha_M) \) 上の二乗可積分関数の同値類全体が成す空間
+\(
+\mathrm{L}^2( \mathbb{R}_{+} \times \Omega, \mathscr{P}, \alpha_M)
+\)
+が定まり, これは
+\[
+	\norm{X}_{M} := \sqrt{ \int_0^{\infty} X^2\, d\alpha_M }
+	=	\sqrt{ E\left( \int_0^{\infty} X^2\, d[M] \right) }
+\]
+をノルムとして Hilbert 空間になる. また, 任意の停止時刻 \( \tau \) に対して,
+\[
+	E\left( \int_0^{\infty} X^2\, d[M^{\tau}] \right)	=
+	E\left( \int_0^{\infty} X^2 1_{[0,\tau]}\, d[M] \right)	=
+	\int_0^{\infty} X^2 1_{[0,\tau]} \, d\alpha_M
+\]
+である. これを念頭に次のように Integrand の空間を定義する.
+
+\begin{dfn} \label{space LL and LLl}
+	\( M \in \Hl \) とするとき,
+	\[
+		\lsm := \mathrm{L}^2( \mathbb{R}_{+} \times \Omega, \mathscr{P}, \alpha_M)
+	\]
+	は \( 
+	\norm{\cdot }_{M} \) をノルムとする Hilbert 空間を表すこととする.
+	また, 可予測な\( X \) で, \( \tau_n \nearrow \infty \ \ \mathrm{a.s.} \)
+	なる停止時刻列 \( \tau_n \) によって, \( X 1_{[0,\tau_n]} \in \lsm \, \forall n \)
+	となるもの全体を\( \LLl{M} \) とする.
+	\fin\end{dfn}
+
+次の補題は, 可予測階段過程に対する Stochastic Integral の結果を一般の \( \lsm \) の元に拡張する際の基礎となる.
+\begin{lem}
+	可予測階段過程全体 \( \mathscr{S} \) は \( \lsm \) で稠密である.
+\end{lem}
+
+\begin{prf}
+	初めに \( \sigma \left( \mathscr{S} \right) = \mathscr{P} \) を示す.
+	\( \sigma \left( \mathscr{S} \right) \subset \mathscr{P} \) は明らかだから逆の包含関係を示す.
+	それには, 有界なLCRL-適合過程 \( L \) が \( \mathscr{S} \) の元によって各点で近似されることを示せばよいが, それは
+	\[
+		L(t,\omega) = \lim_{k \to \infty} \lim_{n \to \infty} \sum_{i=1}^{k2^n}
+		L \left( \frac{i-1}{2^n} \right)1_{ ({(i-1)}/{2^n}, {i}/{2^n} ] }
+	\]
+	によって明らか. よって \( \sigma \left( \mathscr{S} \right) = \mathscr{P} \) を得る.
+	\( \mathscr{S} \) の \( \mathscr{L}^2(M) \) における閉包を \( \overline{\mathscr{S}} \) とすると
+	単調族定理 (\cite{Rogers-Williams:dmm1}, THEOREM 3.2, p.91) により
+	\( \mathrm{b} \mathscr{P} = \mathrm{b} \left( \sigma \left( \mathscr{S} \right) \right)
+	\subset \mathrm{b} \overline{\mathscr{S}} \) であるから
+	\( \mathscr{P} \subset \overline{\mathscr{S}} \).
+	\qed\end{prf}
+
+次の不等式は \( \lsm \) における Schwarz不等式に相当するものである. 
+
+\begin{thm}[Kunita-Watanabe不等式]	% Kunita-Watanabe Inequality
+	\( X, Y \) を \( \mathscr{B} (\mathbb{R}_{+}) \otimes \mathscr{F} \)-可測な確率過程,
+	\( M,N \in \Hl \) とする. 任意の \( 0 \le a \le b \le \infty \) に対して
+	\begin{equation}		\label{Kunita-Watanabe ineq}
+		\int_a^b |XY| \, d[M,N] \asle \sqrt{ \int_a^b X^2\,d[M] }\sqrt{ \int_a^b Y^2\, d[N] }.
+	\end{equation}
+\end{thm}
+
+\begin{prf}
+	単調収束定理により, \( b < \infty \) かつ \( X,Y \) は有界としてよい.
+	\( \tilde{Y} := Y \cdot \mathrm{sgn}(XY) \) を考えることで次を示せば十分である:
+	\begin{equation}		\label{Truncated K-W}
+		\Big| \int_a^b XY \, d[M,N] \Big| \asle 
+		\sqrt{ \int_a^b X^2\,d[M] }\sqrt{ \int_a^b Y^2\, d[N] }.
+	\end{equation}
+	はじめに次を示す.
+	\begin{equation}		\label{1stKW}
+		[M,N]_d - [M,N]_c \asle \sqrt{[M]_d - [M]_c} \sqrt{[N]_d - [N]_c},
+		\quad \forall c,d \in [a,b], c\le d.
+	\end{equation}
+	\( c,d \) を固定すると, 任意の \( q \in \mathbb{Q} \) に対して
+	\begin{equation}		\label{KWtemp1}
+		\begin{split}
+			0 \asle [M+qN]_c^d	&\aseq	( [M]_d - [M]_c ) + 2q ( [M,N]_d - [M,N]_c )
+			\\
+			&	\quad \ +q^2 ( [N]_d - [N]_c ).
+		\end{split}
+	\end{equation}
+	よって, ある \( A(c,d) \), \( P(A(c,d)) = 1 \) の上で, \( \forall q \in \mathbb{Q} \) に対して,
+	ゆえに \( \forall q \in \mathbb{R} \) に対して \eqref{KWtemp1} が成り立つ.
+	よって \( A(c,d) \) 上で
+	\[	
+		[M,N]_d - [M,N]_c \le \sqrt{[M]_d - [M]_c} \sqrt{[N]_d - [N]_c}.
+	\]
+	\( A := \cap_{c,d \in \mathbb{Q} } A(c,d) \) とおくと, \( [M,N], [M], [N] \) の右連続性から
+	\eqref{1stKW} が成り立つ. 
+	
+	次に \( X, Y \) が階段関数の場合に, すなわち
+	\begin{equation}		\label{StepApprox}
+		\begin{split}
+			X	&:= \sum_k x_k 1_{(t_{k-1},t_k]},
+			\\
+			Y	&:= \sum_k y_k {(t_{k-1},t_k]}
+		\end{split}
+	\end{equation}
+	の場合に \eqref{Truncated K-W} を示す. ただし, \( (t_k) \) は \( [a,b] \) の partition とする.
+	\( A \) 上で
+	\begin{align}	\label{2ndKW}
+		\left| \int_a^b XY \, d[M,N] \right|		
+		 & \le	\sum_k \left| x_k y_k \right| \left| [M,N](t_k) - [M,N](t_{k-1}) \right|
+		\notag                                                                           \\
+		 & \le	\sum_k \left| x_k y_k \right| \sqrt{[M](t_k) - [M](t_{k-1})}
+		\sqrt{[N](t_k) - [N](t_{k-1})}
+		\notag                                                                           \\
+		 & \le	\sqrt{ \sum_k x_k^2 \left( [M](t_k) - [M](t_{k-1}) \right) }
+		\sqrt{ \sum_k y_k^2 \left( [N](t_k) - [N](t_{k-1}) \right) }
+		\notag                                                                           \\
+		 & =	\sqrt{ \int_a^b X^2\,d[M] } \sqrt{ \int_a^b Y^2\, d[N] }.
+	\end{align}
+	
+	一般の場合に \eqref{Truncated K-W} を示す.
+	\( \omega \in A \) を固定する.
+	\( | X |, | Y | \le K < \infty \) としてよい.
+	Lusin の定理 (\cite{Rudin:real-and-complex}, 2.24, p.55) により, 以下を満たす \eqref{StepApprox} の形の階段関数 \( g_n, h_n \) が存在する:
+	\begin{align*}
+		 & g_n(t)	\to	X(t,\omega)	\quad d[M](\omega) \ \mathrm{a.e.} \ t
+		\\
+		 & h_m(t)	\to	Y(t,\omega)	\quad d[N](\omega) \ \mathrm{a.e.} \ t
+		\\
+		 & \sup_{t,n} \left|g_n(t) \right| \vee \sup_{t,m} \left|h_m(t) \right|	\le K.
+	\end{align*}
+	ここで, \eqref{1stKW}により \( d[M,N](\omega) \) は \( d[M] \), また \( d[M] \) について絶対連続ゆえ
+	\begin{align*}
+		 & g_n(t)	\to	X(t,\omega)	\quad d[M,N](\omega) \ \mathrm{a.e.} \ t
+		\\
+		 & h_m(t)	\to	Y(t,\omega)	\quad d[M,N](\omega) \ \mathrm{a.e.} \ t
+	\end{align*}
+	でもある.
+	\eqref{2ndKW} により
+	\[
+		\left| \int_a^b g_n h_m \, d[M,N](\omega) \right| \le 
+		\sqrt{ \int_a^b g_n^2\,d[M](\omega) }\sqrt{ \int_a^b h_m^2\, d[N](\omega) }.
+	\]
+	\( n,m \to \infty \) として, 優収束定理により \eqref{Truncated K-W} を得る.
+	\qed\end{prf}
+
+\subsection{Stochastic Integral の構成と性質}
+初めに Riesz の表現定理によって Stochastic Integral を構成し, その後, Quadratic Variation の場合と同様に, 停止公式と Localization によって Stochastic Integral を拡張する.
+構成により, Integrand から Stochastic Integral への写像は等長性を持ち, これによって Stochastic Integral に対する優収束定理が示される.
+
+\begin{thm}[Stochastic Integral の構成1]	\label{construction of first SI}
+	\( M \in \Hs \), \( X \in \mathscr{L}^2 (M) \) に対して, 次の結合律 \eqref{associativity of SI} を満たす \( X \bullet M \in \Hs_0 \) が indistinguishable の意味で一意に存在する:
+	\begin{equation} \label{associativity of SI}
+		[ X \bullet M,\, N ] = X \bullet [M,\,N]	\quad \forall N \in \Hs.
+	\end{equation}
+	ただし, 右辺は \( X \) の \( d[M,\,N] \) についての Lebesgue-Stieltjes 積分 とする.
+	この \( X \bullet M \) を \( X \) の \( M \) に対する Stochastic Integral という.
+	このとき, 
+	\begin{equation}		\label{Isometry of first SI}
+		\lsm \ni X \mapsto X \bullet M \in \Hs_0
+	\end{equation}
+	は等長写像であり, 
+	\begin{equation} \label{Jump rule for first SI}
+		\Delta ( X \bullet M ) = X \Delta M.
+	\end{equation}
+\end{thm}
+
+\begin{rem}
+	定理 \ref{construction of first SI} の statement では Integrand \( X \) の, 有界変動な Integrator \( K \) に対する Stohastic Integral \( X \bullet K \) が,
+	経路ごとの Lebesgue-Stieltjes 積分 \( \int X \, dK \) と一致するか否かは述べていない. 当面の間は, \( X \bullet [M] \) は Stochastic Integral ではなく, 常に経路ごとの Lebesgue-Stieltjes 積分を意味するものとする. 
+	後に述べる命題 \ref{relation with LS integral} によって, 可予測な Integrand 上ではこの二つの積分概念が一致することが示される.
+	\fin\end{rem}
+
+\begin{prf}
+	まず一意性を示す.
+	\eqref{associativity of SI} を満たす \( I_1, I_2 \in \Hs_0 \) は
+	\( [I_1 - I_2 ,\, N ] = 0,\,\, \forall N \in \Hs \)
+	を満たすから \( [I_1 - I_2] = 0 \) を満たす. よって \( I_1 = I_2 \).
+	存在を示す.
+	Kunita-Watanabe不等式により
+	\begin{align*}
+		\left| E \left( \int_0^{\infty} X d[M,\,N] \right) \right|
+		 & \le
+		\left( E \left( \left| \int_0^{\infty} X^2 d[M] \right| \right) \right)
+		\left( E \left( \int_0^{\infty} d[N] \right) \right)
+		\\
+		 & =	
+		\norm{X}_{M} \Hnorm{N}	<	\infty		
+	\end{align*}
+	だから \eqref{associativity of SI} 右辺は確率1 で有限値で,
+	\[
+		\Hs_0 \ni N \mapsto E \left( \int_0^{\infty} X d[M,\,N] \right) \in \mathbb{R}
+	\]
+	は \( \Hs_0 \) 上の連続線型汎関数.
+	よって, Rieszの表現定理により, \( X \bullet M \in \Hs_0 \) が存在して
+	\[
+		( X \bullet M,\, N )_{\Hs} = E \left( \int_0^{\infty} X d[M,\,N] \right).
+	\]
+	を満たす.
+	ここで, \( S := ( X \bullet M )N - X \bullet [M,\,N] \) とおけば,
+	定理 \ref{CharaMar} により \( S \) は Martingale と示せる.
+	
+	さて, \( X \bullet [M,\,N] \) は Lebesgue-Stieltjes 積分だから,
+	\[
+		\Delta X \bullet [M,\,N] = X \Delta [M,\,N] = X\Delta M \Delta N.
+	\]
+	ゆえに, \eqref{Jump rule for first SI} が示せれば, 二次共変分の一意性により
+	\[
+		[ X \bullet M,\, N ] = X \bullet [M,\,N]	\quad \forall N \in \Hs_0.
+	\]
+	これにより, \( N \in \Hs \) に対して
+	\begin{equation}
+		\begin{aligned}
+			[ X \bullet M,\, N ] & =	[ X \bullet M,\, N - N_0 ] \\
+			                     & =	X \bullet [M,\, N - N_0 ]  \\
+			                     & =	 X \bullet [M,\,N]
+		\end{aligned}
+	\end{equation}
+	が得られ, 定理が示される.
+	\eqref{Jump rule for first SI} を示す.
+	はじめに, \( X \) が可予測階段過程, すなわち
+	\begin{equation} \label{PredStep}
+		X := \sum_{ i = 1 }^n \xi_i 1_{(t_i,\, t_{ i + 1 }]},
+		\quad	\xi_i \in \mathrm{b}\mathscr{F}_{t_i}
+	\end{equation}
+	の形であるときに \eqref{Jump rule for first SI} を示す. そのためには
+	\[
+		X \bullet M = \sum_{ i = 1}^n \xi_i \left( M^{t_{ i + 1}} - M^{t_i} \right)
+	\]
+	を示せば十分であるが, \( X \mapsto X \bullet M \) は線型であるから,
+	\[
+		X := \xi 1_{(a,\, b]},\quad	\xi \in \mathrm{b}\mathscr{F}_a
+	\]
+	の場合に示せば十分である.
+	\( N \in \Hs \) に対して
+	\[
+		\left( M^b - M^a \right)N - \left[M^b - M^a,\, N \right]
+	\]
+	は一様可積分 Martingale であるから, 定理 \ref{CharaMar} により
+	\[
+		\xi \left( M^b - M^a \right)N - \xi \left[M^b - M^a,\, N \right]
+	\]
+	も一様可積分 Martingale である. よって
+	\begin{align*}
+		E\left( \xi \left[M^b - M^a,\, N \right](\infty) \right)
+		 & =	E\left( \xi \left( M^b - M^a \right) (\infty) N (\infty) \right)
+		\\
+		 & =	\left( \xi \left( M^b - M^a \right),\,N \right)_{\Hs}
+	\end{align*}
+	これと \( X \bullet M \) の取り方から
+	\begin{equation}	
+		\begin{aligned}
+			( X \bullet M,\, N ) & =	E \left( \int_0^{\infty} X d[M,\,N] \right)                  \\
+			                     & =	E\left( \xi \left( [M,\, N](b) - [M,\, N](a) \right) \right) \\
+			                     & =	E\left( \xi \left[M^b - M^a,\, N \right](\infty) \right)     \\
+			                     & =	\left( \xi \left( M^b - M^a \right),\,N \right)_{\Hs}
+		\end{aligned}
+	\end{equation}
+	よって, \( X \bullet M = \xi (M^b - M^a). \)
+	一般の \( X \in \mathscr{L}^2(M) \) に対して \eqref{Jump rule for first SI} を示す.
+	稠密性から
+	\( 
+	\norm{X_n - X}_{ M } \to 0 \) なる \( X_n \in \mathscr{S} \) が存在するから
+	Doobの不等式, Kunita-Watanabe不等式により
+	\begin{equation}
+		\begin{aligned}
+			E \left( \left( \sup_t \left| ( X \bullet M )_t - ( X_n \bullet M )_t \right| \right)^2 \right)
+			 & \le 4 \LLnorm{ ( (X_n - X) \bullet M ) (\infty) }^2                                      \\
+			 & =4 \Hnorm{(X_n - X) \bullet M}                                                           \\
+			 & =4 E \left( \int_0^{\infty} (X_n - X) \, d[M,\, ( X_n - X ) \bullet M] \right)           \\
+			 & \le 4 \norm{X_n - X}_{ M } \Hnorm{ ( X_n - X) \bullet M }                                \\
+			 & \le \norm{X_n - X}_{ M } \left(\Hnorm{ X_n \bullet M } + \Hnorm{ X \bullet M } \right).
+		\end{aligned}
+	\end{equation}
+	ここで
+	\[
+		[ X_n \bullet M ] = [ X_n \bullet M,\, X_n \bullet M ]
+		= X_n \bullet [ M,\, X_n \bullet M ]
+		= X_n^2 \bullet [ M ]
+	\]
+	に注意すると
+	\begin{equation}		\label{PreIsom}
+		\Hnorm{ X_n \bullet M }	=	\sqrt{ E\left( [ X_n \bullet M ] (\infty) \right) }
+		=	\sqrt{ E \left( \int_0^{\infty} X_n^2\, d[M] \right) }
+		=	
+		\norm{X_n}{ M }
+	\end{equation}
+	であり, 右辺は取り方より有界列.
+	よって
+	\[
+		E\left( \left(
+		\sup_t \left| ( X \bullet M )_t - ( X_n \bullet M )_t \right| 
+		\right)^2 \right) \to 0.
+	\]
+	部分列をとることで, ある確率1の \( A \) の上で
+	\[
+		\sup_t | ( X \bullet M )_t - ( X_{n_k} \bullet M )_t | \to 0.
+	\]
+	よって \( A \) の上で
+	\[
+		\Delta X_{n_k} \bullet M \to \Delta X \bullet M.
+	\]
+	\( \Delta X_{n_k} \bullet M = X_{n_k} \Delta M \)
+	に注意すると, \( A \) 上では, 全ての \( M \) の連続点 \( s \) に対し 
+	\[
+		\Delta ( X \bullet M )(s) = 0 = X \Delta M (s).
+	\]
+	\( M \) の高々可算個の不連続点 \( u \) では \( [M]_u > 0 \) であり,
+	\( X_n \) の取り方より
+	\[
+		\int_0^{\infty} ( X_n - X )^2 \ d[M] \asto 0
+	\]
+	だから, \( X_n(u) \asto X(u) \) である. よって
+	\[
+		\Delta ( X \bullet M )(u) \aseq X \Delta M (u)
+	\]
+	ゆえに
+	\[
+		\Delta ( X \bullet M) (t) \aseq X \Delta M(t). \quad \forall t \ge 0.
+	\]
+	
+	等長性は \( X \mapsto X \bullet M \) の線型性と \eqref{PreIsom} より明らか.
+	\qed\end{prf}
+
+Stochastic Integral を Localization によって拡張するために, 停止公式を示しておく.
+\begin{prp}
+	\( M \in \Hs \), \( X \in \lsm \) とする.
+	任意の停止時刻 \( \tau \) に対して
+	\[
+		(X \bullet M)^{ \tau }	= X \bullet M^{ \tau } = X^{ \tau } \bullet M^{ \tau }
+		= X1_{ [0,\tau] } \bullet M.
+	\]
+\end{prp}
+
+\begin{prf}
+	任意の \( N \in \Hs \) に対して
+	\[
+		\left[ (X \bullet M)^{ \tau },N \right]
+		= \left( \left[ (X \bullet M),N \right] \right)^{ \tau }
+		= \left( X \bullet [ M,N ] \right)^{ \tau }
+		= X \bullet \left[ M^{ \tau },N \right]
+		= [ X \bullet M^{ \tau },N ]
+	\]
+	だから, \( [ (X \bullet M)^{ \tau } - X \bullet M^{ \tau } ] = 0 \).
+	ゆえに, 定理 \ref{characterazation of trivial QV} により \( (X \bullet M)^{ \tau } = X \bullet M^{ \tau } \).
+	残り2つの等式も同様.
+	\qed\end{prf}
+
+\begin{thm}[Stochastic Integral の構成2] \label{construction of second SI}
+	\( M \in \Hl \), \( X \in \LLl{M} \) とする.
+	このとき, \( ( X \bullet M )(0) = 0 \) なる \( X \bullet M \in \Hl \) で, 次の結合公式 \eqref{associativity of SI} を満たすものが一意に存在する:
+	\begin{equation} \label{associativity of SI}
+		[ X \bullet M,N ] = X \bullet [ M,N ],\quad \forall N \in \Hl.
+	\end{equation}
+	この \( X \bullet M \) は, 次のジャンプ公式と停止公式を満たす.
+	\begin{equation} \label{jump rule for SI}
+		\Delta ( X \bullet M ) = X \Delta M
+	\end{equation}
+	\begin{equation} \label{stopped rule for SI}
+		(X \bullet M)^{ \tau }	= X \bullet M^{ \tau }
+		= X^{ \tau } \bullet M^{ \tau }
+		= X1_{ [0,\tau] } \bullet M.
+	\end{equation}
+\end{thm}
+\begin{prf}
+	一意性は定理 \ref{characterazation of trivial QV} による.
+	localizing sequence \( \tau_n \) を \( M^{ \tau_n } \in \Hs \), \( X \in \mathscr{L}(M^{ \tau_n }) \)
+	なるようにとる.
+	\( X \bullet M \) を
+	\[
+		X \bullet M := X \bullet M^{ \tau_n }	\quad \text{on} \quad [0,\tau_n]
+	\]
+	によって定めると, これは well-defined で明らかにRCLL.
+	また定義から
+	\[
+		( X \bullet M )^{\tau_n} = X \bullet M^{\tau_n} \in \Hs_0.
+	\]
+	これより \( ( X \bullet M )^{\tau_n} \) が一様可積分 Martingale, すなわち \( X \bullet M \) が
+	Local Martingale であること, また, \( X \bullet M \in \Hl \) とわかる.
+	また, 構成により
+	\[
+		\Delta ( X \bullet M )^{\tau_n}	= \Delta ( X \bullet M^{\tau_n} )
+		= X \Delta M^{\tau_n}
+	\]
+	だから \eqref{jump rule for SI} は示された. \eqref{associativity of SI} は \( N^{ \tau_n } \in \Hs \) とするとき
+	\[
+		[ X \bullet M, N ]^{ \tau_n }	=	[ X \bullet M^{ \tau_n }, N^{ \tau_n } ]
+		=	X \bullet [ M^{ \tau_n }, N^{ \tau_n } ]
+		=	\big( X \bullet [ M, N ] \big)^{ \tau_n }
+	\]
+	であることによる.
+	\eqref{stopped rule for SI} の初めの等式は
+	\[
+		\left( \left( X \bullet M \right)^{ \tau } \right)^{ \tau_n }
+		= 	\left( \left( X \bullet M \right)^{ \tau_n } \right)^{ \tau }
+		=	\left( X \bullet M^{ \tau_n } \right)^{ \tau }
+		=	X1_{ [0, \tau ] } \bullet M^{ \tau_n }
+		=	\left( X1_{ [0, \tau ] } \bullet M \right)^{ \tau_n }.
+	\]
+	残りの等式も同様にして得られる.
+	\qed\end{prf}
+
+\begin{thm}[Stochastic Integral の等長性]	\label{Isom2}
+	\( M \in \Hl \), \( X \in \lsm \) とすると,
+	\[
+		\lsm \ni X \mapsto X \bullet M \in \Hs_0
+	\]
+	は等長写像である.
+\end{thm}
+\begin{prf}
+	\( M^{\tau_n} \in \Hs \) なるように localizing sequence \( \tau_n \) をとる.
+	\( X1_{ [0, \tau_n ] } \in \lsm \) である.
+	すると \eqref{Isometry of first SI} により
+	\[
+		\Hnorm{( X \bullet M )^{ \tau_n }}	=	\Hnorm{ X \bullet M^{ \tau_n }}
+		=	
+		\norm{ X1_{ [0, \tau_n ] }}_{M}.
+	\]
+	\( n \to \infty \) とすると単調収束定理により, \( \Hnorm{ X \bullet M } = 
+	\norm{X}_{M} < \infty \).
+	\qed\end{prf}
+
+\begin{prp}[Stochastic Integral の線形性]
+	\( M, M_1, M_2 \in \Hl \) とし, 
+	\( X \in \mathscr{L}^2_{\mathrm{loc}}(M_1) \cap \mathscr{L}^2_{\mathrm{loc}}(M_2) \),
+	\( X_1, X_2 \in \LLl{M} \) とすると,
+	\textit{a.s.} で有界な \( \mathscr{F}_0 \)-可測確率変数に \( a,b \) に対して
+	\begin{align*}
+		X \bullet ( a M_1 + b M_2 ) & =	a ( X \bullet M_1 ) + b ( X \bullet M_2 ),
+		\\
+		( a X_1 + b X_2 ) \bullet M & =	a ( X_1 \bullet M ) + b ( X_2 \bullet M ).
+	\end{align*}
+\end{prp}
+
+\begin{prf}
+	ある停止時刻列 \( \tau_n \nearrow \infty \) \ a.s. によって, 
+	\( \int_0^{\infty} X^2 1_{ [0,\tau_n] } \, d[M_i] < \infty \) とでき,
+	Kunita-Watanabe 不等式から
+	\[
+		[ M_1 + M_2] \le 2 \left( [M_1] + [M_2] \right)
+	\]
+	だから
+	\[
+		\int_0^{\infty} X^2 1_{ [0,\tau_n] } \, d[ M_1 + M_2]
+		\le
+		2 \left(
+		\int_0^{\infty} X^2 1_{ [0,\tau_n] } \, d[ M_1 ]
+		+
+		\int_0^{\infty} X^2 1_{ [0,\tau_n] } \, d[ M_2 ]
+		\right)
+		< \infty.
+	\]
+	すなわち, 
+	\( X \in \mathscr{L}^2_{\mathrm{loc}}( M_1 + M_2 ) \).
+	また, 停止時刻の増大列
+	\[
+		\sigma_n :=	\begin{cases}
+			\infty	\ ; \ |a| \le n \\
+			0		\, \ \ ; \ |a| > n
+		\end{cases}
+	\]
+	によって \( X 1_{ [0, \tau_n \wedge \sigma_n] } \in \mathscr{L}^2( a M_1) \)
+	となるから
+	\( X \in \mathscr{L}^2_{\mathrm{loc}}( a M_1 + b M_2 ) \).
+	よって, 一つ目の等式の左辺は存在し, \( N \in \Hl \) に対して
+	\begin{equation}
+		\begin{aligned}
+			[ X \bullet \left( a M_1 + b X_2 \right), N] & =	X \bullet [ a M_1 + b X_2, N]                    \\
+			                                             & =	a X \bullet [M_1, N] + b X [M_2, N]              \\
+			                                             & =	[ a ( X \bullet M_1 ) + b ( X \bullet M_2 ), N]
+		\end{aligned}
+	\end{equation}
+	これと 定理 \ref{characterazation of trivial QV} より一つ目の等式を得る. 二つ目の等式も同様.
+	\qed\end{prf}
+
+\begin{thm}[Stochastic Integral に対する優収束定理]	\label{DCT}
+	\( M \in \Hl \) とし, \( X_n \in \mathrm{m}\mathscr{P} \) が各点 \( ( t,\omega) \) で \( X_{\infty} \)
+	に収束するとする.
+	このとき, \( \left| X_n \right| \le Y \) なる \( Y \in \LLl{M} \) が存在すれば
+	\[
+		\sup_{ s \le t }	\left|
+		\left( X_n \bullet M \right)_s 
+		- \left( X_{\infty} \bullet M \right)
+		\right|
+		\pto 0	\quad n \to \infty.
+	\]
+\end{thm}
+\begin{prf}
+	\( X_{\infty} \equiv 0 \) としてよい.
+	\( \epsilon, \delta > 0 \) をとる.
+	ある停止時刻 \( \tau \) によって
+	\( Y \in \mathscr{L}^2( M^{\tau} ) \),
+	\( P \left( \tau < t \right) < \delta / 2 \)
+	とできる.
+	\begin{align*}
+		A              & :=	
+		\left\{ 
+		\sup_{ s \le t } \left| \left( X_n \bullet M \right)_s \right| > \epsilon 
+		\right\},
+		\\
+		A_{\tau}^{(n)} & :=	
+		\left\{ 
+		\sup_{ s \le t } \left| \left( X_n \bullet M^{\tau} \right)_s \right| > \epsilon 
+		\right\}
+	\end{align*}
+	と定めると,
+	\[
+		P\left( A \right)	=	P\left( \left\{ \tau <t \right\} \cap A \right)
+		+ P\left( \left\{ \tau \ge t \right\} \cap A \right)
+		\le
+		\frac{ \delta }{ 2 } + P\left( A_{\tau}^{(n)} \right).
+	\]
+	いま, \( X_n \in \mathscr{L}^2( M^{\tau} ) \) であるから
+	\[
+		\left\| X_n \right\|_{ M^{\tau} }
+		=	E \left( \int_0^{\infty} X_n^2 1_{ [ 0,\tau ] }\, d[M] \right)
+		\to 0 \quad n \to \infty.
+	\]
+	定理\ref{Isom2} により
+	\( \Hnorm{ X_n \bullet M^{\tau} } \to 0 \ ( n \to \infty) \).
+	ゆえに
+	Doob不等式により
+	\[
+		E \left( \left( \sup_{ s < \infty} \left| X_n \bullet M^{\tau} \right|_s \right)^2 \right)
+		\le
+		4 \Hnorm{ X_n \bullet M^{\tau} }^2 \to 0.
+	\]
+	よって,
+	\( P\left( A_{\tau}^{(n)} \right) \to 0 \).
+	ゆえに \( n \) を十分大きくとれば \( P\left( A \right) \le \delta \).
+	\qed\end{prf}
+
+\subsection{Ito-Stieltjes積分, Lebesgue-Stieltjes 積分との関係}
+Lebesgue 積分論と同様に, 単純な Integrand に対する Stochastic Integral の結果を
+優収束定理 \ref{DCT} によって一般の Integrand に拡張することができる. これを利用すると Stochastic Integral と他の積分との関係を述べることができる (定理 \ref{relation with IS integral}, 命題 \ref{relation with LS integral}). 
+
+\begin{lem}	\label{lem: SI as sum of infinite steps}
+	\( M \in \Hl \) とする. 可予測過程 \( X \) は次の形であるとする:
+	\[
+		X	:= \sum_{ n = 1}^{ \infty } \xi_n 1_{ (\tau_n,\tau_{ n + 1 }] }.
+	\]
+	ただし, \( \tau_n \) は \( \tau_n \nearrow \infty \) なる停止時刻列で,
+	\( \xi_n \in \mathrm{b}\mathscr{F}_{\tau_n} \) とする.
+	このとき
+	\[
+		\left( X \bullet M \right)(t)
+		=	\sum_{ n = 1}^{ \infty } \xi_n 
+		\left(	
+		X( \tau_{ n + 1 } \wedge t ) - X( \tau_n \wedge t )
+		\right).
+	\]
+\end{lem}
+\begin{prf}
+	\( X \in \Hl \) だから \( X^{\pm} \in \Hl \) である.
+	\( X \ge 0 \) のときに示せば十分である.
+	\( X := \xi 1_{ (\sigma,\tau] },\ 0 \le \xi \in \mathrm{b}\mathscr{F}_{\sigma} \)
+	のときは
+	\[
+		[ X \bullet M, N ]
+		=	\int_0^{\infty} \xi 1_{ (\sigma,\tau] }\, d[M,N]
+		=	\left[ \xi \left( M^{\tau} - M^{\sigma} \right), N \right]
+		\quad \forall N \in \Hl
+	\]
+	より補題は成立する.
+	ゆえに
+	\( X \mapsto X \bullet M \)
+	の線型性により
+	\( X_n := \sum_{ i=1 }^n \xi_i 1_{ (\tau_i, \tau_{ i + 1 }] } \)
+	に対しても補題は成立し, 
+	全ての \( n \) に対して \( 0 \le X_n \le X \in \Hl \) だから
+	優収束定理\ref{DCT} によって \( X \ge 0 \) に対して補題が成り立つ.
+	\qed\end{prf}
+
+
+\begin{thm}[Ito-Stieltjes 積分との関係] \label{relation with IS integral}
+	\( M \in \Hl \), \( X \) を LCRL-適合過程とする.
+	停止時刻列 \( \left( \tau_k^{ ( n ) } \right) \) が
+	\begin{align*}
+		\tau_k^{ ( n ) } \le \tau_{ k + 1 }^{ ( n ) } \nearrow \infty
+		\quad k \to \infty,
+		\\
+		\lim_{ n \to \infty } \max_{k}
+		\left| \tau_{ k + 1 }^{ ( n ) } ( \omega ) - \tau_k^{ ( n ) } ( \omega ) \right| = 0
+		\quad \forall \omega
+	\end{align*}
+	を満たすとする.
+	また, \( \In{X} \) を \( \left( \tau_k^{ ( n ) } \right) \) に基づく Ito-Stieltjes 近似和とする. すなわち
+	\[
+		\In{X}(t)	:=
+		\sum_k	X( \tau_k^{ ( n ) } \wedge t )
+		\left(
+		M \left( \tau_{ k + 1 }^{ ( n ) } \wedge t \right)
+		- M \left( \tau_{ k }^{ ( n ) } \wedge t \right)
+		\right)
+	\]
+	とする.
+	このとき,
+	\[
+		\sup_{ s \le t } \left| \In{X}(s) - ( X \bullet M )(s) \right| \pto 0
+		\quad \forall t \ge 0.
+	\]
+\end{thm}
+\begin{prf}
+	\( X_n := \sum_k X( \tau_k^{ ( n ) } ) 1_{ (\tau_{ k }^{ ( n ) }, \tau_{ k + 1 }^{ ( n ) }] } \)
+	とおく.
+	\( X \) は LCRL ゆえ \( X( \tau_k^{ ( n ) } ) \) は \( k, n \) を任意に取るごとに有界としてよい.
+	ゆえに補題 \ref{lem: SI as sum of infinite steps}より
+	\[
+		( X_n \bullet M )_t
+		=
+		\sum_k	X( \tau_k^{ ( n ) } \wedge t )
+		\left(
+		M \left( \tau_{ k + 1 }^{ ( n ) } \wedge t \right)
+		- M \left( \tau_{ k }^{ ( n ) } \wedge t \right)
+		\right)
+		= \In{X} (t).
+	\]
+	一方で, \( X_n \) は左連続ゆえ, 各点 \( ( t, \omega ) \) で \( X_n \to X \) であり,
+	\[
+		X^{*}(t) := \sup_{ s < t } \left| X(s) \right| \in \LLl{M}
+	\]
+	だから, 定理 \ref{DCT} により結論を得る.
+	\qed\end{prf}
+
+\begin{prp}[Lebesgue-Stieltjes 積分との関係] \label{relation with LS integral}
+	\( M \in \Hl \) を固定する.
+	\( X \in \LLl{M} \) に対して, Stochastic Integral \( (X \bullet M)_t \) と
+	Lebesgue-Stieltjes 積分 \( \int_0^t X\,dM \)が
+	任意の \( t \) において a.s. で有限に存在すれば, 両者は indistinguishable.
+\end{prp}
+
+\begin{prf}
+	単調族定理による.
+	\[
+		\mathscr{A}	:=
+		\left\{
+		X \in \mathrm{b} \mathscr{P} \ ; \ 
+		X \bullet M = \int X\,dM
+		\right\}	
+	\]
+	とおく.
+	積分の線型性から, \( \mathscr{A} \) はベクトル空間であり,
+	補題 \ref{lem: SI as sum of infinite steps} により, \( \mathscr{S} \subset \mathscr{A} \).
+	また, \( \mathscr{S} \) は積に閉じる.
+	\( \mathscr{A} \ni X_n \to X \), \( \sup _{t,\omega} | X_n(t,\omega) | \le K < \infty \)
+	とすると, 任意の \( t \) において 優収束定理と定理 \ref{DCT} により
+	\( ( X \bullet M )_t = \int_0^t X\,dM \) \ a.s.
+	両辺とも右連続ゆえ, indistinguishable である.
+	よって \( X \in \mathscr{A} \).
+	以上と単調族定理により, \( \mathrm{b} \mathscr{P} \subset \mathscr{A} \).
+	
+	ある \( X \in \mathrm{m} \mathscr{P} \) に対して命題の仮定が成り立つとすると,
+	\( X_n := X1_{ |X| \le n } \in \mathrm{b} \mathscr{P} \) に対して両積分は一致するから, 
+	\( X_n \) に対して上の議論を繰り返せばよい.
+	\qed\end{prf}
+
+\end{document}

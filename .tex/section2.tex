@@ -1,0 +1,640 @@
+\documentclass{ltjsarticle}
+\usepackage[haranoaji,nfssonly]{luatexja-preset}
+\usepackage{mystyle}
+\usepackage{commands}
+\mathtoolsset{showonlyrefs=true}
+
+% remember that docmute package neglects all the preambles of the included .tex files. 
+\begin{document}
+% note that \chapter is not available for article
+\section{Quadratic Variation}
+
+本章では, \( \Hl \) の元に対して Quadratic Variation が一意に存在することを示し, 次いで, Quadratic Variation の停止時刻による任意停止の公式と, \( \Hs \) の元の Quadratic Variation による特徴付けを示す.
+\( \Hs \) の元に対する Quadratic Variation の存在は, Ito-Stieltjes 積分の存在と部分積分公式から自然に導かれ, Fisk の定理 \ref{Fisk Theorem} によって一意性が保証される.
+この一意性から Quadratic (Co-)Variation の停止公式が得られ, Localization によって Quadratic Variation の存在は \( \Hl \) の元へと拡張される.
+
+\subsection{Ito-Stieltjes 積分の存在}
+Quadratic Variation の存在を示すために, まず Ito-Stieltjes 積分の存在を示そう.
+Ito-Stieltjes 積分は, Riemann-Stieltjes 積分の構成における, 各小区間での代表値を当該小区間の左端点とした場合の積分である.
+ここでは, Integrator は \( \Hs \) の元とし, Integrand は, 経路が不連続であるが, 不連続点における挙動が単純であるという意味で Regular な確率過程とする.
+
+まず初めにIto-Stieltjes 積分と Regular な関数の定義を述べよう.
+
+\begin{dfn}[Ito-Stieltjes 積分] \label{def: Ito-Stieltjes}
+	\( X, Y \) を確率過程とし, \( \left( \tkn \right) \) を \( [a,b] \) の infinitesimal partition とする, すなわち, 
+	\begin{gather*}
+		a = t_1^{(n)} < t_2^{(n)} < \cdots < t_{ k(n)-1 }^{(n)} < t_{ k(n) }^{(n)} = b
+		\\
+		\lim_{ n \to \infty } \max_k \left| t_{ k + 1 }^{(n)} -t_{ k }^{(n)} \right| =0
+	\end{gather*}
+	であるとする.
+	任意のinfinitesimal partition \( (\tkn) \)に対して
+	\[
+		\In{Y} := \sum_k Y(\tkmn) \left( X(\tkn) - X( \tkmn) \right)
+	\]
+	が確率収束し, その極限値が \( \left( \tkn \right) \) の取り方に依らないとき, \( Y \) の \( X \) に対する
+	Ito-Stieltjes 積分が存在するといい, \( \In{Y} \) の極限を \( \int_a^b Y dX \) と書く.
+	\fin\end{dfn}
+
+\begin{lem}[Regularity]
+	\( f \) は 有界閉区間 \( [a,b] \) 上で regular であるとする.
+	すなわち, 任意の \( x \in [a,b] \) に対して, 
+	\( f_{+}( x ) := f( x + ) := \lim_{ z \searrow x } f( z ) \),
+	\( f_{-}( x ) := f( x - ) := \lim_{ z \nearrow x } f( z ) \)
+	がともに \( \mathbb{R} \) 内に存在するとする.
+	このとき次が成り立つ:
+	\begin{enumerate}
+		\item \label{lem:item: regular function admits at most countable jumps}	\( f \) の不連続点は高々可算個である.
+		      
+		\item	\label{lem:item: regular function admits finite big jumps} 任意の \( c > 0 \) に対して,
+		      \( \{ x \, ; \, | \Delta f(x) | \ge c \} \)
+		      は有限集合である.
+		      
+		\item	\label{lem:item: epsilon-delta for regular function} ある \( d > 0 \) に対し \( | \Delta f(x) | \le d, \, \forall x \in [a,b] \) とする.
+		      このとき, 任意の \( \epsilon > 0 \) に対して \( \delta > 0 \) が存在して
+		      \[
+			      | x - y | < \delta 
+			      \quad \Rightarrow \quad
+			      | f( x ) - f( y ) | < d + \epsilon.
+		      \]
+	\end{enumerate}
+	ただし, \( \Delta f( x ) := f_{+}( x ) - f_{-}( x ) \).
+\end{lem}
+
+\begin{prf}
+	\ref{lem:item: regular function admits at most countable jumps} は \ref{lem:item: regular function admits finite big jumps} から直ちに従う.
+	\ref{lem:item: regular function admits finite big jumps} を背理法で示す.
+	数列 \( \{ x_n \}_{ n \ge 1} \) が \( | \Delta f( x_n ) | \ge c \) をみたすとする.
+	\( x_n \nearrow x^* \in [a,b] \) としてよい.
+	\( x_n, x^*, w, y \) たちを互いに十分近く, かつ \( w < x_n < y \) なるようにとれば, \( f \) は regular ゆえ
+	\begin{equation}
+		\begin{aligned}
+			\left| f( x_n+ ) - f( y ) \right| & <	\frac{c}{4} \\
+			\left| f( w ) - f( x_n- ) \right| & <	\frac{c}{4} \\
+			\left| f( y ) - f( w ) \right|    & <	\frac{c}{4}
+		\end{aligned}
+	\end{equation}
+	とできる. よって
+	\begin{equation}
+		\begin{aligned}
+			c & \le \left| f( x_n+ ) - f( x_n- ) \right|                         \\
+			  & <		\left| f( x_n+ ) - f( y ) \right|
+			+ \left| f( y ) - f( w ) \right| + \left| f( w ) - f( x_n- ) \right| \\
+			  & <		\frac{3}{4}c.
+		\end{aligned}
+	\end{equation}
+	
+	\ref{lem:item: epsilon-delta for regular function} も背理法で示す.
+	\( \delta_n \searrow 0 \) に対して,
+	\begin{equation}		\label{TooBigJump}
+		| x_n - y_n | \le \delta_n, \quad | f( x_n ) - f( y_n ) | \ge d + \epsilon_0
+	\end{equation}
+	を満たす \( \epsilon_0 > 0 \), \( x_n, y_n \in [a,b] \) が存在すると仮定する.
+	\( x_n \to x^*, y_n \to x^* \) としてよい.
+	さらに, \( x_n \le x^* \le y_n \) としてよい. 
+	なぜなら, もし無限個の \( n \) に対して \( x_n,\, y_n \le x^* \) とすると \eqref{TooBigJump} と \( f \) の regular 性に反するからである.
+	したがって \( x_n \nearrow x^*, y_n \searrow x^* \) としてよいが, このとき
+	\( | \Delta f(x) | \ge d + \epsilon_0 \) となり, \ref{lem:item: epsilon-delta for regular function} の仮定に反する.
+	\qed\end{prf}
+
+
+\begin{prp}[Ito-Stieltjes 積分の存在]
+	\( Y \) を \( [a,b] \) 上でregularな適合過程とし, \( X \in \Hs \)とすると, Ito-Stieltjes積分\( \int Y dX \)が存在する.すなわち, 任意のinfinitesimal partition \( \left( \tkn \right) \)に対して
+	\[
+		\In{Y} := \sum_k Y(\tkmn) \left( X(\tkn) - X(\tkmn) \right)
+	\]
+	は確率収束する. このとき, 
+	\begin{equation}		\label{JumpsNotMatter}
+		\int Y dX = \int Y_{-}dX = \int Y_{+}dX.
+	\end{equation}
+\end{prp}
+
+\begin{prf}
+
+	任意に\( \eta > 0 \), \( \epsilon > 0 \)をとり, 以下のように記号を定める.
+	%
+	\begin{align*}
+		c   & := \sqrt{ \frac{ \eta \epsilon^2 }{ 48 (\LLnorm{X_b}^2 - \LLnorm{X_a}^2) } } \\
+		J_t & := \Delta Y_t1_{ \{ | \Delta Y_t | \ge c\} }                                 \\
+		U_t & := Y_t - J_t
+	\end{align*}
+	%
+	\( J_ t \)は有限個のジャンプしか持たないから, \( X \)の右連続性により
+	%
+	\[
+		\In{J} := \sum_k J(\tkmn) \left(X(\tkn) - X(\tkmn) \right) \to 0
+		\quad (n \to \infty).
+	\]
+	%
+	ゆえに\( n,m \)を十分大きくとれば
+	%
+	\begin{equation}		\label{ IJprob }
+		P \left(	\left| \In{J} - \Im{J} \right| > \frac {\epsilon}{2} \right) < \frac {\eta}{3}.
+	\end{equation}
+	
+	一方, 
+	\begin{align*}
+		U_{\delta}^*(u,\,\omega)
+		     & := \sup 
+		\left\{ 
+		| U_s - U_t | \,;\,
+		s,t \in \mathbb{Q} \cup
+		\cap [a,b], \, |s - t| < \delta 
+		\right\},
+		\\
+		\tau & := \tau_{\delta} :=
+		\inf 
+		\{
+		u \ge 0 \,;\, 
+		U_{\delta}^*(u) > c 
+		\}	\wedge b,
+		\\
+		V    & := U^{\tau}
+	\end{align*}
+	%
+	とおくと\( \tau \)は停止時刻である.
+	\( \lim_{ \delta \to 0 } U_{ \delta }^*( u ) = \sup_t | \Delta U_t | \le c \) ゆえ
+	\( \delta > 0 \) を十分小さくとれば
+	%
+	\begin{gather*}
+		P(	\tau < b	) < \frac {\eta}{3}	\\	
+		|s-t| < \delta
+		\quad \Rightarrow \quad
+		|V_s - V_t| \le 2c.
+	\end{gather*}
+	%
+	このとき, infinitesimal partition \( \tkn \), \( t_l^{(m)} \) の幅が \( \delta / 2 \) より小さくなるよう
+	\( n \), \( m \) を十分大きくとれば, Chebyshev不等式と \( X \) のMartingale性により
+	%
+	\begin{align}	\label { IVprob }
+		P\left(	\left| \In{V} - \Im{V} \right| > \frac{ \epsilon }{ 2 }	\right)
+		 & \le 4{ \LLnorm{ \In{V} - \Im{V}}^2 } {\epsilon} ^{-2}                   \\
+		 & \le 16c^2 \epsilon ^{-2} \left( \LLnorm{X_b}^2 - \LLnorm{X_a}^2 \right) \\
+		 & =	\frac{ \eta }{ 3 }.
+	\end{align}
+	
+	\eqref{ IJprob } \eqref{ IVprob }により
+	\( n \), \( m \)を十分大きくとれば
+	\( A := \{ \tau < b \} \)とおくとき
+	%
+	\begin{align*}
+		P \left(	\left| \In{Y}-\Im{Y} \right| > \epsilon	\right)
+		 & \le	P \left(	\left| \In{J} - \Im{J} \right| > \frac{ \epsilon } { 2}	\right) + P \left(	\left| \In{U} - \Im{U} \right| > \frac{ \epsilon }{ 2 }	\right)                                          \\
+		 & \le	\frac{ \eta }{ 3 } + P \left(	A \cap \left| \In{U} - \Im{U} \right| > \frac{ \epsilon }{ 2 } \right) + P \left(	A \comp \cap \left| \In{V} - \Im{V} \right| > \frac{ \epsilon }{ 2 }	\right) \\
+		 & \le	P(A) + P \left(	A \comp \cap \left| I_n^{(V)} - I_m^{(V)} \right| > \frac{ \epsilon }{ 2 }	\right)                                                                                           \\
+		 & \le	\eta.
+	\end{align*}
+	%
+	よって, \( \In{Y} \) は確率収束する.
+	
+	\eqref{JumpsNotMatter} を示すには
+	%
+	\[
+		S_n := \sum_k \left( Y(\tkmn) - Y_{-}(\tkmn) \right)
+		\left( X(\tkn) - X(\tkmn) \right) \pto 0
+	\]
+	%
+	を示せば十分である.
+	%
+	\[
+		W := Y-Y_{-}
+	\]
+	%
+	とおくと, \( | W_t | \ge d \) \( ( d > 0 ) \) となる \( t \) は有限個しかないとわかるから, 
+	%
+	\[
+		\sum_k W 1_{ \{ | W | \ge d \} } \left( \tkmn \right) \left( X(\tkn) - X(\tkmn) \right) \pto 0.
+	\]
+	%
+	よって, はじめから \( | W | < d \) としてよい.
+	いま, 任意に \( \eta > 0 \), \( \epsilon > 0 \) をとり
+	%
+	\[
+		d := \sqrt{ \frac{ \eta \epsilon^2 }{ \LLnorm{ X_b }^2 - \LLnorm{ X_a }^2 }}
+	\]
+	と選ぶと
+	\begin{align*}
+		P( | S_n | > \epsilon )
+		 & \le	\epsilon^{ -2 } \LLnorm{ S_n }^2
+		\\
+		 & \le	d^2 \epsilon^{ -2 } \left( \LLnorm{ X_b }^2 - \LLnorm{ X_a }^2 \right) \\
+		 & =	\eta.
+	\end{align*}
+	\qed\end{prf}
+
+上のように構成された Ito-Stieltjes 積分は 区間 \( [a,b] \) を定めるごとに確率1の集合上で定義された確率変数に過ぎない. 次の命題は, Integrand が有界であれば Ito-Stieltjes 積分を確率過程と見なしてよいことを主張する.
+
+%	Ito-Stieltjes 積分の存在
+\begin{prp}[Ito-Stieltjes 積分に対するRCLL version の存在]	%	積分過程の存在
+	\( Y \)を \( [a,b] \) 上で有界かつregularな適合過程とし, \( X \in \Hs \)とする. このとき, 
+	\( \int Y dX \) のversionでRCLL-Martingaleなもの \( Y \bullet X \) が存在し, 
+	任意のinfinitesimal partition \( \left( \tkn \right) \) に対して次が成り立つ.
+	\[
+		\sup_{ a \le s \le t } | \In{ Y_{+} }(s) - Y \bullet X(s) | \pto 0.
+	\]
+	ただし, 
+	\[
+		\In{ Y_{+} }(s) := \sum_k Y_{+}( \tkmn \wedge s )
+		\left( X( \tkn \wedge s )-X( \tkmn \wedge s ) \right).
+	\]
+\end{prp}
+
+\begin{prf} 
+	\( K := \sup_{ t,\, \omega} | Y(t,\,\omega) | \) とおく.
+	\( Y_{+} \) は適合的で \( | Y_{+} | \le K \) だから \( \In{ Y_{+} }(t) \) はMartingaleである. 
+	さらに
+	\[
+		\LLnorm{ \In{ Y_{+} }(t) }^2 \le K^2 \left( \LLnorm{X_b}^2 - \LLnorm{X_a}^2 \right),
+		\quad \forall t \in [a,b]
+	\]
+	だから \( \In{ Y_{+} }(t) \) は \( L^2 ( \Omega ) \)-有界.
+	よって \( \In{ Y_{+} }(t) \) は一様可積分だから, 
+	\[
+		\In{ Y_{+} }(t) \lto Y \bullet X (t) \aseq \int_a^t Y_{+} dX \aseq \int_a^t Y dX.
+	\]
+	\( \In{ Y_{+} }(t) \) のMartingale性により
+	\[
+		\In{ Y_{+} }(s) \aseq E \left(\, \In{ Y_{+} }(t) \,|\, \mathscr{F}_s \right)
+	\]
+	だから
+	\[
+		Y \bullet X (s) \aseq E \left(\, Y \bullet X (t) \,|\, \mathscr{F}_s \right).
+	\]
+	Doob不等式により, \( \lambda > 0 \) に対して
+	\[
+		P \left( \sup_t \left| \In{Y_{+}}(t) - \Im{Y_{+}}(t) \right| > \lambda \right)
+		\le \lambda^{-1} \Lnorm{ \In{Y_{+}}(b) - \Im{Y_{+}}(b) } \to 0.
+	\]
+	したがって, 部分列を適当に選ぶことで, \( Y \bullet X \) は
+	RCLL な \( I_{n(k)}^{(Y_{+})} \) の一様概収束極限としてよいから, RCLL としてよい.
+	\qed\end{prf}
+
+\subsection{Quadratic Varation の構成と性質}
+
+Ito-Stieltjes 積分の存在から直ちに従う部分積分公式を用いて \( \Hs \) の元に対する Quadratic Variation が構成される(定理 \ref{doob-mayer1}).
+次いで, Localization によって Quadratic variation を \( \Hl \) へと拡張する (定理 \ref{doob-mayer2}).
+
+\begin{dfn}[Quadratic (Co-)Variation]	\label{def: naive QV}
+	\( X, Y \) を \( [a,b] \) 上の確率過程, \( \left( \tkn \right) \) を \( [a,b] \) の infinitesimal partition とする.
+	\[
+		\sum_k \left( X( \tkn ) - X( \tkmn ) \right)
+		\left( Y( \tkn ) - Y( \tkmn ) \right)
+	\]
+	が確率収束し, 極限が \( \left( \tkn \right) \) の選び方に依らないとき,
+	その極限を \( [X,Y]_a^b \) と書き, \( X \) と \( Y \) の \( [a,b] \) 上での
+	Quadratic Co-Variation (QCV) といい,
+	\( [X]_a^b := [X,X]_a^b \)
+	を \( X \) の \( [a,b] \) 上での Quadratic Variation (QV) という.
+	\fin\end{dfn}
+
+\begin{thm}[部分積分公式]	\label{integration by parts}
+	任意の \( M, N \in \Hs \) と, 任意の有界区間 \( [a,b] \)に対して \( [M,N]_a^b \) が存在し,
+	\[
+		( MN )_b - ( MN )_a
+		=
+		\int_a^b M_{-} dN + \int_a^b N_{-} dM + [M,N]_a^b
+	\]
+	が成り立つ.
+	ただし, 右辺の積分は Ito-Stieltjes 積分である.
+\end{thm}
+
+\begin{prf}
+	\( \left( \tkn \right) \) を \( [a,b] \) の infinitesimal partition とする.
+	\begin{equation}
+		\begin{aligned}
+			 & M( \tkn ) N( \tkn ) - M( \tkmn ) N( \tkmn )
+			\\
+			 & \aseq
+			M( \tkmn ) \left( N( \tkn ) -N( \tkmn ) \right)
+			+ N( \tkmn ) \left( M( \tkn ) -M( \tkmn ) \right)
+			\\
+			 & \quad \ + \left( M( \tkn ) -M( \tkmn ) \right) \left( N( \tkn ) -N( \tkmn ) \right)
+		\end{aligned}
+	\end{equation}
+	の \( k \) についての和をとり, \( n \to \infty \) とすればよい.
+	\qed\end{prf}
+
+定義 \ref{def: naive QV} における \( [X]_0^{t} \) は確率過程ではないが, 次の命題の意味で QV と一致する \( \Hs \) の元が取れる.
+\begin{prp}[簡易版 Doob-Mayer 分解1] \label{doob-mayer1}
+	\( M \in \Hs \)かつ\( M_{-} \)を有界とすると, RCLLかつ単調増加な\( [M](t) \)で, 
+	\begin{itemize}
+		\item	\( [M](0) = 0 \)
+		\item	\( \Delta [M] = ( \Delta M )^2 \)
+		\item	\( M^2 - [M] \)がMaritingale
+	\end{itemize}
+	であるものがindistinguishableの意味で一意に存在する.
+	この \( [M] \) も Quadratic Variation (または, Quadratic Variation 過程) という.
+	また任意の\( [0,t] \) のinfinitesimal partition \( \left( \tkn \right) \)に対して
+	\begin{equation}		\label{Qnucp}
+		\sup_{ s \le t }| Q_n(s)-[M](s) | \pto 0.
+	\end{equation}
+	ただし, 
+	\[
+		Q_n(s) := \sum_k \left(M ( \tkn \wedge s ) - M ( \tkmn \wedge s ) \right)^2.
+	\]
+\end{prp}
+\begin{prf}
+	任意に \( t \ge 0 \) をとる. 部分積分公式 (定理 \ref{integration by parts}) により
+	\[
+		[M]_0^t \aseq M_t^2 - M_0^2 - 2\int_0^t M_{-} dM.
+	\]
+	仮定により, 右辺第三項はRCLL-Martingaleとしてよいから
+	\[
+		[M](t) := M_t^2 - M_0^2 - 2\int_0^t M_{-} dM.
+	\]
+	もRCLLとしてよく, \( M^2 - [M] \) はMaritingaleである.
+	単調性は \( [M](t) \) の右連続性と次から出る:
+	\[
+		P \left( [M](q_1) \le [M](q_2)
+		\quad \forall q_1,q_2 \in \mathbb{Q},\, q_1 \le q_2 \right) = 1.
+	\]
+	\eqref{Qnucp}は次の変形による:
+	\begin{align*}
+		Q_n(s) & =	\sum_k \left(M^2( \tkn \wedge s ) - M^2( \tkmn \wedge s ) \right)
+		\\
+		       & \quad \quad - 2 \sum_k M ( \tkmn \wedge s )
+		\left( M( \tkn \wedge s ) - M( \tkmn \wedge s ) \right)
+		\\
+		       & =	M_s^2 - M_0^2 - \In{M}(s).
+	\end{align*}
+	\eqref{Qnucp} は概収束としてもよいから
+	\begin{equation}
+		\begin{aligned}
+			\Delta[M](s) & \aseq\lim_{ n \to \infty } \Delta Q_n(s)                                                                                                  \\
+			             & =	\lim_{ n \to \infty } \left[ \left( M(s) - M( t_{ j(n)-1 }^{(n)} ) \right)^2 - \left( M(s-) - M( t_{ j(n)-1 }^{(n)} ) \right)^2 \right] \\
+			             & =	\left(\Delta M(s) \right)^2,
+		\end{aligned}
+	\end{equation}
+	ここに \( j(n) \) は \( t_{ j(n)-1 }^{(n)} < s \le t_{ j(n) }^{(n)} \)を満たすものをとった. 
+	\( P \) も題意の性質を満たすとすると, 
+	\( N := P - [M] \) は有界変動なMartingaleであり, 
+	\( \Delta N = \Delta [M] - \Delta P = 0 \) ゆえ連続である.
+	よって定理 \ref{Fisk Theorem} より一意性を得る.
+	\qed\end{prf}	%hsに対する二次変分過程の存在
+
+上の命題の仮定のもとでは, 停止時刻 \( \tau \) に対して
+\( ( M^2 - [M] )^{\tau} = ( M^{\tau} )^2 - [M]^{\tau} \) が Martingale であることから, 一意性により
+\( [ M^{\tau} ] = [M]^{\tau} \)
+であることに注意する.
+この事実と Locailzation によって前命題を拡張しよう. 
+
+\begin{thm}[簡易版 Doob-Mayer 分解2]	\label{doob-mayer2}
+	\( M \in \Hl \) に対して, RCLLかつ単調増加な \( [M](t) \) で, 
+	\begin{itemize}
+		\item	\( [M](0) = 0 \).
+		\item	\( \Delta [M] = ( \Delta M )^2 \).
+		\item	\( M^2 - [M] \)が Local Maritingale.
+	\end{itemize}
+	であるものがindistinguishableの意味で一意に存在する.
+	この \( [M] \) も Quadratic Variation (または, Quadratic Variation 過程) という.
+	また任意の \( [0,t] \) のinfinitesimal partition \( \left( \tkn \right) \)に対して
+	\begin{equation}		\label{Qnucp2}
+		\sup_{ s \le t }| Q_n(s)-[M](s) | \pto 0
+	\end{equation}
+	ただし, 
+	\[
+		Q_n(s) := \sum_k \left(M ( \tkn \wedge s ) - M ( \tkmn \wedge s ) \right)^2.
+	\]
+\end{thm}
+
+\begin{prf}
+	\( \tau_n \) を \( M \) の localizing sequence とする. 
+	\( \sigma_n := \inf \{ t \ge 0 \,, \, | M_{t-} | \ge n \} \) は停止時刻で
+	\( | M_{-} ^ { \sigma_n } | \le n \).
+	よって \( \rho_n := \tau_n \wedge \sigma_n \) と定めると
+	\( M_{-} ^ { \rho_n } \) は有界で \( M ^ { \rho_n } \in \Hs \).
+	いま, \( M_n := M ^ { \rho_n } \) とおくと
+	\[
+		[M_{ n + 1 }] ^ { \rho_n } = [M_{ n + 1 } ^ { \rho_n } ] = [M_n].
+	\]
+	よって
+	\[
+		[M_{ n + 1 }] = [M_n] \quad \text{on} \quad [0, \rho_n].
+	\]
+	\( \rho_n \nearrow \infty \) だから
+	\[
+		[M] (t, \omega) := [M_n] (t, \omega), \quad (t, \omega) \in [0, \rho_n]
+	\]
+	によって \( [M] \)定めると,
+	\( [M] \) は右連続, 単調増加で \( [M](0) = 0 \), \( \Delta [M] = ( \Delta M )^2 \).
+	また, 前命題により
+	\[
+		( M^2 - [M] )^{ \rho_n } = ( M^{ \rho_n } )^2 - [ M^{ \rho_n } ] = M_n^2 - [M_n] 
+	\]
+	は Martingale だから, \( M^2 - [M] \) は Local Martingale である.
+	
+	\eqref{Qnucp2} を示す. 任意に \( \epsilon > 0 \) をとる.
+	\begin{align*}
+		Q^{(m)}_n(s) & := 
+		\sum_k \left(M^{ \rho_m } ( \tkn \wedge s )
+		- M^{ \rho_m } ( \tkmn \wedge s ) \right)^2
+		\\
+		A_n          & := 	\left\{ 
+		\sup_{ s \le t }
+		\left| Q_n(s)-[M](s) \right| > \epsilon 
+		\right\}
+		\\
+		A^{(m)}_n    & := 	
+		\left\{ 
+		\sup_{ s \le t }
+		\left|
+		Q^{(m)}_n(s)-[M]^{ \rho_m } (s) 
+		\right| 
+		> \epsilon 
+		\right\}
+	\end{align*}
+	とおく.
+	任意の \( \delta > 0 \) に対して \( n,m \) を十分大きくとれば
+	\( P( \rho_m < t ) < \delta / 2 \), \( P( A^{(m)}_n ) < \delta / 2 \) とできる. よって
+	\begin{align*}
+		P(A_n) & =	P(A_n \cap \{ \rho_m < t \} )
+		+ P(A_n \cap \{ \rho_m \ge t \} )
+		\\
+		       & \le	P( \rho_m < t ) + P(A^{(m)}_n)
+		\\
+		       & < \delta.
+	\end{align*}
+	一意性は前命題 \ref{doob-mayer1} と同様にして示せる.
+	\qed\end{prf}	%hslに対する二次変分過程の存在
+
+\begin{cor}[Quadratic Co-Variation 過程の存在] \label{existence QCV process}
+	\( M , N \in \Hl \) に対して, RCLLかつ有界変動な\( [M, N](t) \)で, 
+	\begin{itemize}
+		\item	\( [M, N](0) = 0 \)
+		\item	\( \Delta [M, N] = \Delta M \Delta N \)
+		\item	\( MN - [M, N] \)が Local Maritingale
+	\end{itemize}
+	であるものがindistinguishableの意味で一意に存在する.
+	また任意の\( [0,t] \) のinfinitesimal partition \( \left( \tkn \right) \)に対して
+	\begin{equation}		\label{Rnucp}
+		\sup_{ s \le t } \left| R_n(s)-[M, N](s) \right| \pto 0.
+	\end{equation}
+	ここで,
+	\[
+		R_n(s) := \sum_k (M ( \tkn \wedge s ) - M ( \tkmn \wedge s ) )
+		(N ( \tkn \wedge s ) - N ( \tkmn \wedge s ) ).
+	\]
+\end{cor}
+
+\begin{prf}
+	一意性は定理 \ref{Fisk Theorem} による.
+	\begin{equation}		\label{QCV}
+		[M, N] := \frac{1}{4} \left( [M + N] - [M - N] \right)
+	\end{equation}
+	が系の性質を満たすことを示す.
+	実際, RCLLかつ有界変動かつ \( [M, N](0) = 0 \) は明らかであり
+	\[
+		MN - [M, N]
+		=
+		\frac{1}{4} \left[ \left\{ (M + N )^2 - [M + N] \right\}
+		- \left\{ (M - N )^2 - [M - N] \right\} \right]
+	\]
+	は Local Martingale である. また
+	\begin{equation}
+		\begin{aligned}
+			\Delta [M, N] & =	\frac{1}{4} \left(\Delta [M + N] - \Delta[M - N] \right)                              \\
+			              & =	\frac{1}{4} \left\{ ( \Delta ( M + N ) )^2 - \left( \Delta (M - N) \right)^2 \right\} \\
+			              & =	 \Delta M \Delta N.
+		\end{aligned}
+	\end{equation}
+	\eqref{Rnucp} は \eqref{QCV} より明らか.
+	\qed\end{prf}	%hslに対する二次共変分過程の存在
+
+以下で QV の性質を述べる.
+
+\begin{prp}[QV 停止公式]	%停止公式
+	\( M , N \in \Hl ,\, \tau \) を停止時刻とすると
+	\begin{gather*}
+		[M]^{\tau} = [M^{\tau}]
+		\\
+		[M, N]^{\tau} = [M^{\tau}, N^{\tau}] = [M^{\tau}, N].
+	\end{gather*}
+\end{prp}
+
+\begin{prf}
+	\( ( M^2 - [M] )^{\tau} = ( M^{\tau} )^2 - [M]^{\tau} \) は Local Martingale ゆえ
+	\( [ M^{\tau} ] = [M]^{\tau} \). 
+	
+	\( [M, N]^{\tau} = [M^{\tau}, N^{\tau}] \) は \eqref{QCV} より明らか.
+	最後の等式を示す.
+	\begin{align*}
+		M^{\tau} - [M, N]^{\tau} & =	 M^{\tau}N - M^{\tau}N^{\tau} + M^{\tau}N^{\tau}
+		+ M^{\tau}N^{\tau} - [M, N]^{\tau}
+		\\
+		                         & =	M^{\tau} ( N - N^{\tau} ) 
+		+ ( M^{\tau}N^{\tau} - [M, N]^{\tau} )
+	\end{align*}
+	だから \( M^{\tau} ( N - N^{\tau} ) \) が Local Martingale であることを示せばよい.
+	一般に, \( X, Y \in \Hs \) と有界な停止時刻 \( \sigma \) に対し
+	\( X^{\tau}( Y - Y^{\tau} )( \sigma ) \in \mathrm{L}^1(\Omega) \) であり, また
+	\[
+		E \left[ X^{\tau}( Y - Y^{\tau} )( \sigma ) \right]
+		=	E \left[ E \left( X_{ \tau \wedge \sigma }
+			\left( Y_{\sigma} - Y_{ \tau \wedge \sigma } \right)
+			\,|\, \mathscr{F}_{ \tau \wedge \sigma } \right) \right]
+		=	0
+	\]
+	だから \( X^{\tau}( Y - Y^{\tau} ) \) は Martingale である.
+	ゆえに \( \rho_n \) を \( M, N \) の localizing sequence とすると
+	\( ( M^{ \rho_n \wedge \tau } - M_0 ) ( N^{ \rho_n } - N^{ \rho_n \wedge \tau }) \) 
+	は Martingale である.
+	%よって
+	%\( M^{ \rho_n \wedge \tau } ( N^{ \rho_n } - N^{ \rho_n \wedge \tau }) \)
+	%は Martingale であるから
+	これより
+	\( M^{\tau} ( N - N^{\tau} ) \)
+	が Local Martingale とわかる.
+	\qed\end{prf}	%停止公式
+%
+
+次の命題は明らかであろう.
+\begin{prp}
+	\( L, M, N \in \Hl \) とし, \( a,b \) を \textit{a.s.} で有限な \( \mathscr{F}_0 \)-可測確率変数 とすると
+	\begin{align*}
+		[M, N]       & =	[N, M]            \\
+		[aM + bN, L] & = a[M, L] + b[N, L] \\
+		[M - a, N]   & =	[M, N]
+	\end{align*}
+\end{prp}
+
+
+\begin{prp}[\( \Hs \) の特徴付け]	\label{characterization of Hs}
+	\( M \in \Hl \)とすると
+	\[
+		M \in \Hs
+		\quad \Leftrightarrow \quad
+		M_0 \in \mathrm{L}^2 ( \Omega ),\, E \left( [M] ( \infty ) \right) < \infty .
+	\]
+	このうちの一方が成り立つとき \( M^2 - [M] \) は一様可積分な Martingale である. 
+\end{prp}
+
+\begin{prf}
+	\( ( \Rightarrow ) \)
+	\( M_0 \in \mathrm{L}^2 ( \Omega ) \) は明らか.
+	\( \tau_n \) を \( M^2 - [ M ] \)
+	の localizing sequence として, 
+	\( \sigma_n := \tau_n \wedge n \)
+	とおくと
+	\[
+		E \left( M^2 ( \sigma_n ) - [ M ]( \sigma_n ) \right) = E \left(M^2_0 \right).
+	\]
+	仮定と Doob不等式により
+	\[
+		E \left( M^2 ( \sigma_n ) \right) \le E \left( \sup_t M^2_t \right) < \infty.
+	\]
+	ゆえに
+	\[
+		E \left([ M ]( \sigma_n ) \right) 
+		= E \left( M^2 ( \sigma_n ) \right) - E \left(M^2_0 \right)
+	\]
+	の右辺は有界となり, 単調収束定理によって \( [M] ( \infty ) \in \mathrm{L}^1 ( \Omega ) \).
+	またこのとき, \( M^2 - [ M ] \) は class D に属するから一様可積分な Martingale である.
+	
+	\( ( \Leftarrow ) \)
+	\( \tau \) を停止時刻,
+	\( \sigma_n \) を \( M \) の localizing sequence とする.
+	\( M_{-}^{ \sigma_n } - M_0 \in \mathrm{b}\Hs \)
+	としてよい.
+	\( N := M^{ \sigma_n \wedge \tau } - M_0 \) とおくと
+	\[
+		N^2(t) = 2 \int_0^t N_{-} dN + [N](t)
+	\]
+	であり, 右辺第一項は RCLL-Martingale としてよい.
+	すると
+	\[
+		E \left( N^2(t) \right) = E \left( [N](t) \right) 
+		= E \left( [M^{ \sigma_n \wedge \tau }] (t) \right)
+		\le E \left( [M](\infty) \right) < \infty
+	\]
+	だから, Fatouの補題により
+	\[
+		E \left( \left( M - M_0 \right)^2 ( \tau ) \right) 
+		\le E \left( [M](\infty) \right) < \infty.
+	\]
+	よって \( M - M_0 \) は class D に属するから Martingale であり, \( M - M_0 \in \Hs \).
+	これと仮定により \( M \in \Hs \).
+	\qed\end{prf}	%hsの特徴付け
+
+\begin{prp}[Trivial QV の特徴付け]	\label{characterazation of trivial QV}
+	\( M \in \Hl \) に対して
+	\[
+		M\textit{の経路が定数 }
+		\quad \Leftrightarrow \quad
+		[M] = 0.
+	\]
+\end{prp}
+\begin{prf}
+	\( ( \Rightarrow ) \) 明らか.
+	
+	\( ( \Leftarrow ) \)
+	\( M \) も \( M^2 \) も Local Martingale とすると \( ( M - M_0 )^2 \) も Local Martingale である.
+	これに対する localizing sequence を \( \tau_n \) とすると, 任意の \( t \ge 0 \) に対して
+	\( E \left[ \left( M( t \wedge \tau_n) - M_0 \right)^2 \, \right] = 0 \).
+	よって,
+	\( M( t \wedge \tau_n) \aseq M_0 \).
+	ゆえに,
+	\( M( t ) \aseq M_0 \).
+	右連続性から,
+	\( P(M_t = M_0 \,\, \forall t \ge 0 ) =1 \).
+	\qed\end{prf}
+\end{document}

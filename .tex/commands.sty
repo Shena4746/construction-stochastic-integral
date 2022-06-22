@@ -1,7 +1,53 @@
 % marcro
 \newcommand{\equalby}[1]{\stackrel{#1}{=}}
+\newcommand{\COLON}{\;:\;}
 
 % item label
 \renewcommand{\labelenumi}{(\alph{enumi})}
 \renewcommand{\labelenumii}{(\roman{enumii})}
 \renewcommand{\theenumi}{(\alph{enumi})}
+
+% specific to this doc
+\newcommand{\hs}{\mathscr{H}^2}
+\newcommand{\Hs}{\mathscr{H}}
+
+\newcommand{\hsl}{\mathscr{H}^2_{\mathrm{loc}}}
+\newcommand{\Hl}{\mathscr{H}_{\mathrm{loc}}}
+
+\newcommand{\lsm}{\mathscr{L}^2 (M)}
+\newcommand{\LL}[1]{\mathscr{L}^2(#1)}
+
+\newcommand{\lsml}{\mathscr{L}^2_{\mathrm{loc}}}
+\newcommand{\LLl}[1]{\mathscr{L}^2_{\mathrm{loc}}(#1)}
+
+\newcommand{\tk}{t_k^{(n)}}
+\newcommand{\tkn}{t_k^{(n)}}
+
+\newcommand{\tkk}{t_{k-1}^{(n)}}
+\newcommand{\tkmn}{t_{k-1}^{(n)}}
+
+\newcommand{\pto}{ \stackrel{ \mathrm{P} }{ \to }}
+\newcommand{\asto}{ \stackrel{ \mathrm{ a.s.} }{ \to }}
+\newcommand{\lto}{ \stackrel{ \mathrm{L}^1 }{ \to } }
+\newcommand{\ltto}{ \stackrel{ \mathrm{L}^2 }{ \to } }
+\newcommand{\llto}{ \stackrel{ \mathrm{L}^2 }{ \to } }
+\newcommand{\aseq}{ \stackrel{ \text{a.s.} }{ = }}
+\newcommand{\asle}{ \stackrel{ \text{a.s.} }{ \le }}
+
+% not replaced yet
+\newcommand{\norm}[1]{ \left\| #1 \right\|}
+
+\newcommand{\Ln}[1]{ \left\| #1 \right\|_{\mathrm{L}^1(\Omega)}}
+\newcommand{\Lnorm}[1]{ \norm{#1}_{\mathrm{L}^1(\Omega)}}
+
+\newcommand{\lln}[1]{ \left\| #1 \right\|_{\mathrm{L}^2(\Omega)}}
+\newcommand{\LLnorm}[1]{ \norm{#1}_{\mathrm{L}^2(\Omega)}}
+
+\newcommand{\Mn}[1]{ \left\| #1 \right\|_{M}}
+
+\newcommand{\Hn}[1]{ \left\| #1 \right\|_{\Hs}}
+\newcommand{\Hnorm}[1]{ \norm{#1}_{\Hs}}
+
+\newcommand{\In}[1]{ I_n^{ (#1) } }
+\renewcommand{\Im}[1]{ I_m^{ (#1) } }
+\newcommand{\comp}{^{\mathrm{c}}}

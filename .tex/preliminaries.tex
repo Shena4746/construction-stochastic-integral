@@ -1,0 +1,250 @@
+\documentclass{ltjsarticle}
+\usepackage[haranoaji,nfssonly]{luatexja-preset}
+\usepackage{mystyle}
+\usepackage{commands}
+
+\begin{document}
+
+\section{Preliminaries}
+以下において, 確率基は \( ( \Omega,\, \mathscr{F},\, \{ \mathscr{F}_t \}_{ t \ge 0 } ,\, P ) \) とする.
+確率過程は常に \( \mathbb{R}_{+} \times \Omega \to \mathbb{R} \) なる関数とする.
+確率過程 \( X \), \( Y \) が indistinguishable であるとき, すなわち
+\( P \left( X_t = Y_t \ \forall t \ge 0 \right) = 1 \) であるとき, 単に \( X = Y \) と書く.
+
+確率過程 \( X \) がRCLL (Right Continuous with Left-hand Limit) であるとは,
+\( X \) の経路, すなわち, \( \omega \in \Omega \) 固定したときの
+\( \mathbb{R}_{+} \ni t \mapsto X(t, \omega) \in \mathbb{R} \),
+が 右連続で, 各点 \( t \) で有限な左極限を持つときをいう. LCRL (Left Continuous with Right-hand Limit) についても同様である.
+
+
+%確率基と通常の仮定
+\begin{dfn}[通常の仮定] \label{usual condition}
+	以下を確率基 \( ( \Omega,\, \mathscr{F},\, \{ \mathscr{F}_t \}_{ t \ge 0 } ,\, P ) \) に関する通常の仮定と呼ぶ.
+	\begin{itemize}
+		\item 確率空間 \( ( \Omega,\, \mathscr{F},\, P ) \) は完備,
+		\item \( \left\{ N \in \mathscr{F} \,;\, P(N) = 0 \right\}
+		      \subset \mathscr{F}_0 \),
+		\item  \( \mathscr{F}_t	=	\bigcap_{ s > t } \mathscr{F}_s \subset \mathscr{F}, \quad \forall t \ge 0. \)
+	\end{itemize}
+\end{dfn}
+
+\begin{dfn}[Martingale]	% Maritingale
+	確率過程 \( X \) が次を満たすとき \( X \) を Martingale という:
+	\begin{itemize}
+		\item 	\( X \) は適合過程である. すなわち,
+		      \( X_t \in \mathrm{m}\mathscr{F}_t,\ \forall t \ge 0 \).
+		\item	\( X_t \in \mathrm{L}^1 (\Omega), \quad t \ge 0 \).
+		\item	\( E(X_t \, | \, \mathscr{F}_s) \aseq X_s, \quad s \le t \).
+	\end{itemize}
+\end{dfn}
+
+\begin{thm}[Martingale の RCLL version の存在. \cite{Karatzas-Shreve:bmsc}, Theorem 3.13, p.16 ]		\label{ReguMar}
+	定義 \ref{usual condition} の意味での通常の仮定のもとで, 任意の  Martingale \( X \) に対して, RCLL-Martingale であり,
+	かつ \( X \) の version である \( Y \) , すなわち, 任意の \( t \ge 0 \) に対して
+	\( P \left( X_t = Y_t \right) =1 \)
+	である \( Y \) が存在する.
+\end{thm}
+
+以下では, 定理 \ref{ReguMar} により, Martingale を考えるときは常に経路が RCLL である version を選ぶこととする.
+
+\begin{dfn}[停止時刻]
+	\( [0,\infty] \)-値確率変数 \( \tau \) が停止時刻であるとは
+	\[
+		\{ \tau \le t \} \in \mathscr{F}_t,	\quad	\forall t \ge 0
+	\]
+	であるときをいう. 確率過程 \( X \) の \( \tau \) による停止過程を
+	\( X^{\tau}(t) := X( \tau \wedge t) \) と書く.
+\end{dfn}
+
+
+\begin{thm}[任意抽出定理. \cite{Rogers-Williams:dmm1}, THEOREM 77.5, p.189 ]
+	\( X \) を 一様可積分RCLL-Martingale とする.
+	このとき, 任意の停止時刻 \( \sigma \le \tau \) に対して
+	\[
+		E \left( X_{\tau} | \mathscr{F}_{\sigma} \right) \aseq X_{\sigma}.
+	\]
+	したがって特に
+	\[
+		E( X_{\tau} ) = E( X_{\sigma} ) = E ( X_0 ).
+	\]
+\end{thm}
+
+逆に, 与えられたRCLL-適合過程が Martingale であるための一つの十分条件が次である.
+%Characterization of Martingale
+\begin{prp}	\label{CharaMar}
+	\( X \) をRCLL-適合過程とする.
+	\begin{enumerate}
+		\item	\label{cdn:rcll is Martingale} 任意の有界な停止時刻 \( \tau \) に対して,
+		      \[
+			      X ( \tau ) \in \mathrm{L}^1(\Omega),\,
+			      E( X ( \tau ) ) = E(X_0)
+		      \]
+		      であるとき, \( X \) は Martingale である.
+		\item \label{cdn:rcll is UI Martingale} \ref{cdn:rcll is Martingale} が任意の停止時刻 \( \tau \) に対して成り立てば,
+		      \( X \) は一様可積分 Martingale.
+	\end{enumerate}
+\end{prp}
+
+\begin{prf}
+	\ref{cdn:rcll is Martingale}.
+	\( s < t \) と \( A \in \mathscr{F}_s \) を任意にとる.
+	\[
+		\tau_A ( \omega )	:=	\begin{cases}
+			s \,\, ; \,\, \omega \in A \\
+			t \,\, ; \,\, \omega \in A\comp
+		\end{cases}
+	\]
+	とおくと, これは有界停止時刻であるから, 仮定により
+	\begin{align*}
+		E( X_0 ) & =	E( X( \tau_A ) )	= \int_A X_s\, dP + \int_{A \comp} X_t\, dP,
+		\\
+		E( X_0 ) & =	E( X_t )	= \int_A X_t\, dP + \int_{A \comp} X_t\, dP.
+	\end{align*}
+	よって
+	\[
+		\int_A X_t\, dP	=	\int_A X_s\, dP.
+	\]
+	だから \( X \) は Martingale である. \ref{cdn:rcll is UI Martingale} は \( t = \infty \) のときを考えればよい.
+	\qed\end{prf}
+
+\begin{dfn}[Local Maritingale]	% Local Martingale
+	RCLL-確率過程 \( X \) に対して 次を満たす 停止時刻列\( \tau_n \) が存在するとき,
+	\( X \) を Local Martingale という.
+	\begin{itemize}
+		\item	\( \tau_n \nearrow \infty \) a.s.
+		\item	任意の \( n \) に対し, \( X^{\tau_n} - X_0 \) は一様可積分 Martingale.
+	\end{itemize}
+	また, このような \( \tau_n \) を \( X \) の localizing sequence という.
+\end{dfn}
+
+\begin{thm}[Class D]\label{ClassD}
+	Local Martingale \( X \) に対して,
+	\[
+		X \text{ が一様可積分Martingale}
+		\iff
+		\{ X( \tau ) \, ; \, \tau \, : \, \text{有限値の停止時刻} \}
+		\text{ が一様可積分 }.
+	\]
+	右の条件を満たす確率過程全体を class D という.
+\end{thm}
+
+\begin{prf}
+	\( ( \Rightarrow ) \)
+	任意抽出定理 ( \cite{Rogers-Williams:dmm1}, THEOREM 77.5, p.189 ) によって明らか.
+
+	\( ( \Leftarrow ) \)
+	\( X \) が Martingale であることを示せば十分である.
+	\( \tau \equiv 0 \) をとることで \( X_0 = 0 \) としてよい.
+	\( \tau_n \) を \( X \) の localizing sequence とすると
+	\( s < t \) に対して
+	\[
+		E \left( X( \tau_n \wedge t ) | \mathscr{F}_s \right)
+		= E \left( X^{ \tau_n }_t | \mathscr{F}_s \right)
+		\aseq X( \tau_n \wedge s ).
+	\]
+	\( \{ X^{ \tau_n }_t \}_t \) は一様可積分ゆえ \( n \to \infty \) とするとき,
+	\( X( \tau_n \wedge t ) \lto X_t \).
+	よって, 上の式において \( n \to \infty \) とすれば \( X \) が Martingale とわかる.
+	\qed\end{prf}
+
+
+\begin{thm}[Fisk] \label{Fisk Theorem}
+	連続かつ有界変動な Local Martingale の経路は定数である.
+\end{thm}
+
+\begin{prf}
+	\( X \) を Local Martingale, \( \tau_n \) をその localizing sequence とする.
+	\( V_t \) を \( X \) の \( [0,t] \) での総変動とする.
+	\( X_0 = 0 \) としてよい.
+	いま,
+	\begin{align*}
+		\alpha_n & := \inf \left\{ t \ge 0 \, ; \, | X_t | \ge n \right\}
+		\\
+		\beta_n  & := \inf \left\{ t \ge 0 \, ; \, V_t \ge n \right\}
+		\\
+		\rho_n   & := \tau_n \wedge \alpha_n \wedge \beta_n
+	\end{align*}
+	とおくと \( \rho_n \) は \( X \) の localizing sequence である.
+	任意の \( n \) に対して
+	\[
+		X(t,\omega) = 0,	\quad
+		\forall (t,\omega) \in [ 0,\rho_n ] :=
+		\{ (t,\omega) \, ; \, t \le \rho_n (\omega) \}
+	\]
+	が示せれば
+	\[
+		X(t,\omega) = 0,	\quad
+		\forall (t,\omega) \in \mathbb{R}_{ + } \times \Omega
+		= \bigcup_n [ 0,\rho_n ]
+	\]
+	を得るから, \( X \) を有界な Martingale, \( V \le K < \infty \) としてよい.
+
+	任意の \( t \) に対して \( ( \tk ) \) を \( [0,t] \) の infinitesimal partition とすると,
+	\( X_0 =0 \) と Martingale 性により
+	\[
+		E \left(X_t^2 \right)	=	E \left( \sum_k ( X_{ \tk } - X_{ \tkk } )^2 \right)
+		=	K E \left( \max_k \left| X_{ \tk } - X_{ \tkk } \right| \right)
+	\]
+	\( X \) の \( [0,t] \) 上での一様連続性と優収束定理により, 上式右辺は
+	\( n \to \infty \) のとき \( 0 \) に収束する.
+	ゆえに \( X_t \aseq 0,\ \forall t \ge 0 \).
+	\( X \) は連続だから \( P( X_t = 0 \ \forall t \ge 0 ) = 1 \)
+	\qed\end{prf}
+
+\begin{dfn}[空間 \( \Hs \)] \label{space Hs}
+	\( \Hs \) を \( \mathrm{L}^2(\Omega) \)-有界な RCLL-Martingale 全体の集合する, すなわち
+	\[
+		\Hs	:=	\left\{ \textit{RCLL-Martingale}\ X
+		\,;\, \sup_t \lln{X_t} < \infty \right\}
+	\]
+	とする.
+	また, \( \Hs_0 := \{ X \in \Hs ;\,\, X_0 = 0 \} \) とおく.
+	また, RCLL-確率過程 \( X \) で, \( \tau_n \nearrow \infty \ \mathrm{a.s.} \)
+	なる停止時刻列 \( \tau_n \) によって,
+	\( X^{ \tau_n } \in \Hs \) となる \( X \) 全体を \( \Hl \) とおく.
+\end{dfn}
+
+\begin{prp}
+	\( \Hs \) は 内積\( (X,Y)_{\Hs} := E(X_{\infty}Y_{\infty}) \) による Hilbert 空間であり.
+	\( \Hs_0 \) はその閉部分空間である.
+	ノルムは常に \( \Hn{X} := \lln{X_{\infty}} \) を考える.
+\end{prp}
+
+\begin{prf}
+	\( M \in \Hs \), \( 0 \le t_n \nearrow \infty \) とすると, Martingale 性により \( n > m \) のとき
+	\[
+		\lln{ M_{t_n} - M_{t_m} }^2 = \lln{ M_{t_n} }^2 - \lln{ M_{t_m} }^2
+	\]
+	ゆえ \( \lln{ M_{t_n} } \) は単調増加で, 仮定により上に有界だから,
+	\( M_t \llto \exists M_{\infty} \ (t \to \infty) \).
+	ゆえに内積とノルムは well-defined である.
+	\( \left( \Hs, \Hn{\ \cdot \ } \right) \) の完備性を示す.
+	\( X^{ ( n ) } \in \Hs \) を Cauchy 列とする.
+	すなわち
+	\( X^{ ( n ) }_{\infty} \in L^2( \Omega, \mathscr{F}_{\infty}, P ) \),\,
+	\( \mathscr{F}_{\infty} := \sigma \left( \bigcup_{ t \ge 0} \mathscr{F}_t \right) \)
+	を Cauchy 列とする.
+	\( \mathrm{L}^2 \) の完備性から,
+	\[
+		X^{ ( n ) }_{\infty} \llto \exists X_{\infty},\,( n \to \infty ).
+	\]
+	いま,
+	\[
+		X_t := E \left( X_{\infty} | \mathscr{F}_t \right)
+	\]
+	とおくと, \( X_t \) は \( \mathrm{L}^2 \)-有界 Martingale で,
+	Doob 不等式 ( \cite{Rogers-Williams:dmm1}, THEOREM 70.2, p.177 ) から
+	\[
+		E \left( \sup_t \left| X_t^{ ( n ) } - X_t \right|^2 \right)
+		\le
+		4 E \left( \left| X_{ \infty }^{ ( n ) } - X_{\infty} \right|^2 \right) \to 0
+		\quad ( n \to \infty).
+	\]
+	部分列をとることで
+	\[
+		\sup_t \left| X_t^{ ( n_k ) } - X_t \right|	\asto 0
+		\quad ( k \to \infty )
+	\]
+	とできるから \( X_t \) はRCLL としてよい. ゆえに \( X \in \Hs \).
+	\qed\end{prf}
+\end{document}

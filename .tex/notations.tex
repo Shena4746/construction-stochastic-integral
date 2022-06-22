@@ -1,24 +1,38 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass{ltjsarticle}
+\usepackage[haranoaji,nfssonly]{luatexja-preset}
 \usepackage{mystyle}
 \usepackage{commands}
 
 \begin{document}
 \section*{Notations}
 \addcontentsline{toc}{section}{Notations}
-
+初めに, 本稿を通じて利用される記号をまとめておく.
 \begin{enumerate}
 	\renewcommand{\labelenumi}{\(\diamond\)}
-	\item
-	      \( \neg \)\;:\;
-	      negation.
-
-	\item
-	      \( \vee \)\;:\;
-	      disjunction.
-
-	\item
-	      \( \wedge \)\;:\;
-	      conjunction.
+	\item \( \mathbb{R} \) \COLON 実数全体の集合.
+	\item \( \mathbb{R}_{+} := \left\{ x \in \mathbb{R} \, ; \, x \ge 0 \right\} \).
+	\item \( X\comp \) \COLON 集合 \( X \) の補集合.
+	\item \( A := B \) \COLON \( A \) を \( B \) と定義する.
+	\item \( a \wedge b := \min \{ a,b \} \).
+	\item \( a \vee b := \max \{ a,b \} \).
+	\item \( 1_C \)\;:\; 集合 \( C \) の定義関数.
+	\item \( x_n \searrow x \) \COLON \( x_1 > x_2 > \cdots > x_n > x_{n+1} > \cdots \), かつ \( x_n \to x \) \( (n \to \infty) \). \( x_n \nearrow x \) も同様.
+	\item \( f_{+}( x ) := f( x + ) := \lim_{ z \searrow x } f( z ) \).
+	\item \( f_{-}( x ) := f( x - ) := \lim_{ z \nearrow x } f( z ) \).
+	\item \( \Delta f( x ) := f_{+}( x ) - f_{-}( x ) \).
+	\item \( \tkn \) : infinitesimal partition. 定義 \ref{def: Ito-Stieltjes} 参照.
+	\item \( \norm{\cdot } \): ノルム.
+	\item \( \text{m}\mathscr{A} \) \COLON \( \mathscr{A} \)-可測関数全体の集合.
+	\item \( \text{b}\mathscr{A} \) \COLON \( \mathscr{A} \)-可測かつ有界な関数全体の集合.
+	\item \( ( \Omega,\, \mathscr{F},\, \{ \mathscr{F}_t \} _{ t \ge 0 } ,\, P ) \) \COLON Filtration 付き確率空間, または確率基.
+	\item \( \pto \) \COLON 測度 \( P \) に関する確率収束. \( \asto \), \( \llto \) なども同様.
+	\item \( \Hs \) \COLON 定義 \ref{space Hs} 参照.
+	\item \( \Hl \) \COLON 定義 \ref{space Hs} 参照.
+	\item \( \mathscr{L}^2 \) \COLON 定義 \ref{space LL and LLl} 参照.
+	\item \( \mathscr{L}^2_{\mathrm{loc}} \) \COLON 定義 \ref{space LL and LLl} 参照.
+	\item \( [M, N] \) \COLON Quadratic Co-Variation. 定義 \ref{def: naive QV}, 系 \ref{existence QCV process} 参照.
+	\item \( [M]:=[M, M] \) \COLON Quadratic Variation. 定義 \ref{def: naive QV}, 命題 \ref{doob-mayer1}, 定理 \ref{doob-mayer2} 参照.
+	\item \( X \bullet M \) \COLON Stochastic Integral. 定理 \ref{construction of first SI}, 定理 \ref{construction of second SI} 参照.
 \end{enumerate}
 
 \end{document}
